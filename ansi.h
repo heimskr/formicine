@@ -41,6 +41,7 @@ namespace ansi {
 			std::unordered_set<ansi::style> styles;
 
 		public:
+			ansistream();
 			ansistream(std::ostream &stream): content_out(stream), style_out(stream) { }
 			ansistream(std::ostream &c, std::ostream &s): content_out(c), style_out(s) { }
 			ansistream & operator<<(const ansi::color &);
