@@ -46,6 +46,23 @@ namespace ansi {
 		return *this;
 	}
 
+	ansistream & ansistream::operator<<(std::ostream & (*fn)(std::ostream &)) {
+		fn(content_out);
+		return *this;
+	}
+
+	ansistream & ansistream::operator<<(std::ostream & (*fn)(std::ios &)) {
+		fn(content_out);
+		return *this;
+	}
+
+	ansistream & ansistream::operator<<(std::ostream & (*fn)(std::ios_base &)) {
+		fn(content_out);
+		return *this;
+	}
+
+	ansistream & ansistream::operator<<(const char *t) { content_out << t; return *this; }
+
 	template <typename T>
 	ansistream & ansistream::operator<<(const T &value) {
 		content_out << value;
