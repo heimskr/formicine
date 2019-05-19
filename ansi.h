@@ -10,17 +10,26 @@ using std::string;
 
 namespace ansi {
 	enum color {
-		DEFAULT, RED, ORANGE, YELLOW, YEEN, GREEN, BLUE, CYAN, MAGENTA, PURPLE, BLACK, GRAY, LIGHTGRAY, WHITE, PINK, SKY
+		normal, red, orange, yellow, yeen, green, blue, cyan, magenta, purple, black, gray, lightgray, white, pink, sky
 	};
 
-	enum style {BOLD, DIM, ITALIC, UNDERLINE};
-	enum color_type {TEXT, BG};
+	enum style {bold, dim, italic, underline};
+	enum color_type {text, background};
+	enum action {reset};
+
+	template <typename T>
+	struct ansi_pair {
+		T value;
+		bool add;
+		ansi_pair(T value, bool add): value(value), add(add) { }
+	};
 
 	struct color_pair {
 		ansi::color color;
 		ansi::color_type type;
 
 		color_pair(ansi::color color, ansi::color_type type): color(color), type(type) { }
+		color_pair(ansi::color color): color(color), type(text) { }
 	};
 
 	class ansistream {
@@ -30,8 +39,6 @@ namespace ansi {
 			ansi::color text_color;
 			ansi::color bg_color;
 			std::unordered_set<ansi::style> styles;
-			string get_text(const ansi::color &);
-			string get_bg(const ansi::color &);
 
 		public:
 			ansistream(std::ostream &stream): content_out(stream), style_out(stream) { }
@@ -39,52 +46,59 @@ namespace ansi {
 			ansistream & operator<<(const ansi::color &);
 			ansistream & operator<<(const ansi::color_pair &);
 			ansistream & operator<<(const ansi::style &);
-			ansistream & operator>>(const ansi::style &);
+			ansistream & operator<<(const ansi::ansi_pair<ansi::style> &);
+			ansistream & operator<<(const ansi::action &);
 			ansistream & operator<<(std::ostream & (*fn)(std::ostream &));
 			ansistream & operator<<(std::ostream & (*fn)(std::ios &));
 			ansistream & operator<<(std::ostream & (*fn)(std::ios_base &));
 			ansistream & operator<<(const char *t);
 			template <typename T>
 			ansistream & operator<<(const T &);
+
+			ansistream & operator>>(const ansi::style &);
 	};
 
-	color_pair bg(ansi::color);
+	string get_text(const ansi::color &);
+	string get_bg(const ansi::color &);
+	color_pair fg(ansi::color color);
+	color_pair bg(ansi::color color);
+	ansi_pair<ansi::style> remove(ansi::style);
 
-	const string reset    = "\e[0m";
-	const string reset_fg = "\e[39m";
-	const string reset_bg = "\e[49m";
+	const string reset_all = "\e[0m";
+	const string reset_fg  = "\e[39m";
+	const string reset_bg  = "\e[49m";
 
 	const std::map<color, string> color_bases = {
-		{DEFAULT,   "9"},
-		{RED,       "1"},
-		{ORANGE,    "8;5;202"},
-		{YELLOW,    "3"},
-		{YEEN,      "8;5;112"},
-		{GREEN,     "2"},
-		{BLUE,      "4"},
-		{CYAN,      "6"},
-		{MAGENTA,   "5"},
-		{PURPLE,    "8;5;56"},
-		{BLACK,     "0"},
-		{GRAY,      "8;5;8"},
-		{LIGHTGRAY, "8;5;7"},
-		{WHITE,     "7"},
-		{PINK,      "8;5;219"},
-		{SKY,       "8;5;153"},
+		{normal,    "9"},
+		{red,       "1"},
+		{orange,    "8;5;202"},
+		{yellow,    "3"},
+		{yeen,      "8;5;112"},
+		{green,     "2"},
+		{blue,      "4"},
+		{cyan,      "6"},
+		{magenta,   "5"},
+		{purple,    "8;5;56"},
+		{black,     "0"},
+		{gray,      "8;5;8"},
+		{lightgray, "8;5;7"},
+		{white,     "7"},
+		{pink,      "8;5;219"},
+		{sky,       "8;5;153"},
 	};
 
 	const std::map<style, string> style_codes = {
-		{BOLD,      "\e[1m"},
-		{DIM,       "\e[2m"},
-		{ITALIC,    "\e[3m"},
-		{UNDERLINE, "\e[4m"},
+		{bold,      "\e[1m"},
+		{dim,       "\e[2m"},
+		{italic,    "\e[3m"},
+		{underline, "\e[4m"},
 	};
 
 	const std::map<style, string> style_resets = {
-		{BOLD,      "\e[22m"},
-		{DIM,       "\e[22m"},
-		{ITALIC,    "\e[23m"},
-		{UNDERLINE, "\e[24m"},
+		{bold,      "\e[22m"},
+		{dim,       "\e[22m"},
+		{italic,    "\e[23m"},
+		{underline, "\e[24m"},
 	};
 }
 
