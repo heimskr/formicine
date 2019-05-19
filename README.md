@@ -24,4 +24,4 @@ int main(int, char **) {
 > Normal text  
 **Bold text**  
 <span style="color:green">Green text</span>  
-<span style="text-decoration:underline">Underlined text, *italic+underlined text*</span> *and just italic text.*
+<span style="text-decoration:underline">Underlined text, <span style="font-style:italic">italic+underlined text</span></span> <span style="font-style:italic">and just italic text.</span>
