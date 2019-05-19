@@ -40,11 +40,8 @@ namespace ansi {
 			ansistream & operator<<(const ansi::color_pair &);
 			ansistream & operator<<(const ansi::style &);
 			ansistream & operator>>(const ansi::style &);
-			ansistream & operator<<(const string &);
-			ansistream & operator<<(const char &);
-			ansistream & operator<<(const int &);
-			ansistream & operator<<(const float &);
-			ansistream & operator<<(const double &);
+			template <typename T>
+			ansistream & operator<<(const T &);
 	};
 
 	color_pair bg(ansi::color);

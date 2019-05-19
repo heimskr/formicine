@@ -46,15 +46,9 @@ namespace ansi {
 		return *this;
 	}
 
-	#define ANSISTREAM_OPER(type) \
-		ansistream & ansistream::operator<<(const type &value) { \
-			content_out << value; \
-			return *this; \
-		}
-
-	ANSISTREAM_OPER(string);
-	ANSISTREAM_OPER(char);
-	ANSISTREAM_OPER(int);
-	ANSISTREAM_OPER(float);
-	ANSISTREAM_OPER(double);
+	template <typename T>
+	ansistream & ansistream::operator<<(const T &value) {
+		content_out << value;
+		return *this;
+	}
 }
