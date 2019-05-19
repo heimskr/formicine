@@ -4,56 +4,86 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <unordered_set>
 
 using std::string;
 
 namespace ansi {
 	enum color {
-		RED, ORANGE, YELLOW, YEEN, GREEN, BLUE, CYAN, MAGENTA, PURPLE, BLACK, GRAY, LIGHTGRAY, WHITE, PINK, SKY
+		DEFAULT, RED, ORANGE, YELLOW, YEEN, GREEN, BLUE, CYAN, MAGENTA, PURPLE, BLACK, GRAY, LIGHTGRAY, WHITE, PINK, SKY
 	};
 
 	enum style {BOLD, DIM, ITALIC, UNDERLINE};
+	enum color_type {TEXT, BG};
+
+	struct color_pair {
+		ansi::color color;
+		ansi::color_type type;
+
+		color_pair(ansi::color color, ansi::color_type type): color(color), type(type) { }
+	};
 
 	class ansistream {
 		private:
-			std::ostream &out;
-			ansi::color color;
+			std::ostream &content_out;
+			std::ostream &style_out;
+			ansi::color text_color;
+			ansi::color bg_color;
+			std::unordered_set<ansi::style> styles;
+			string get_text(const ansi::color &);
+			string get_bg(const ansi::color &);
 
 		public:
-			ansistream(std::ostream &out_): out(out_) { }
-			ansistream & operator<<(const ansi::color c);
-			ansistream & operator<<(const string &str);
+			ansistream(std::ostream &stream): content_out(stream), style_out(stream) { }
+			ansistream(std::ostream &c, std::ostream &s): content_out(c), style_out(s) { }
+			ansistream & operator<<(const ansi::color &);
+			ansistream & operator<<(const ansi::color_pair &);
+			ansistream & operator<<(const ansi::style &);
+			ansistream & operator>>(const ansi::style &);
+			ansistream & operator<<(const string &);
+			ansistream & operator<<(const char &);
+			ansistream & operator<<(const int &);
+			ansistream & operator<<(const float &);
+			ansistream & operator<<(const double &);
 	};
 
-	const string reset        = "\e[0m";
-	const string reset_fg     = "\e[39m";
-	const string reset_bg     = "\e[49m";
-	const string reset_bold   = "\e[22m";
-	const string reset_dim    = "\e[22m";
-	const string reset_italic = "\e[23m";
-	const string reset_under  = "\e[24m";
+	color_pair bg(ansi::color);
 
-	const string bold   = "\e[1m";
-	const string dim    = "\e[2m";
-	const string italic = "\e[3m";
-	const string under  = "\e[4m";
+	const string reset    = "\e[0m";
+	const string reset_fg = "\e[39m";
+	const string reset_bg = "\e[49m";
 
-	const std::map<color, string> colors = {
-		{RED,       "\e[31m"},
-		{ORANGE,    "\e[38;5;202m"},
-		{YELLOW,    "\e[33m"},
-		{YEEN,      "\e[38;5;112m"},
-		{GREEN,     "\e[32m"},
-		{BLUE,      "\e[34m"},
-		{CYAN,      "\e[36m"},
-		{MAGENTA,   "\e[35m"},
-		{PURPLE,    "\e[38;5;56m"},
-		{BLACK,     "\e[30m"},
-		{GRAY,      "\e[38;5;8m"},
-		{LIGHTGRAY, "\e[38;5;7m"},
-		{WHITE,     "\e[37m"},
-		{PINK,      "\e[38;5;219m"},
-		{SKY,       "\e[38;5;153m"},
+	const std::map<color, string> color_bases = {
+		{DEFAULT,   "9"},
+		{RED,       "1"},
+		{ORANGE,    "8;5;202"},
+		{YELLOW,    "3"},
+		{YEEN,      "8;5;112"},
+		{GREEN,     "2"},
+		{BLUE,      "4"},
+		{CYAN,      "6"},
+		{MAGENTA,   "5"},
+		{PURPLE,    "8;5;56"},
+		{BLACK,     "0"},
+		{GRAY,      "8;5;8"},
+		{LIGHTGRAY, "8;5;7"},
+		{WHITE,     "7"},
+		{PINK,      "8;5;219"},
+		{SKY,       "8;5;153"},
+	};
+
+	const std::map<style, string> style_codes = {
+		{BOLD,      "\e[1m"},
+		{DIM,       "\e[2m"},
+		{ITALIC,    "\e[3m"},
+		{UNDERLINE, "\e[4m"},
+	};
+
+	const std::map<style, string> style_resets = {
+		{BOLD,      "\e[22m"},
+		{DIM,       "\e[22m"},
+		{ITALIC,    "\e[23m"},
+		{UNDERLINE, "\e[24m"},
 	};
 }
 
