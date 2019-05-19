@@ -21,15 +21,15 @@ namespace ansi {
 	struct ansi_pair {
 		T value;
 		bool add;
-		ansi_pair(T value, bool add): value(value), add(add) { }
+		ansi_pair(T value, bool add): value(value), add(add) {}
 	};
 
 	struct color_pair {
 		ansi::color color;
 		ansi::color_type type;
 
-		color_pair(ansi::color color, ansi::color_type type): color(color), type(type) { }
-		color_pair(ansi::color color): color(color), type(text) { }
+		color_pair(ansi::color color, ansi::color_type type): color(color), type(type) {}
+		color_pair(ansi::color color): color(color), type(text) {}
 	};
 
 	class ansistream {
@@ -42,8 +42,8 @@ namespace ansi {
 
 		public:
 			ansistream();
-			ansistream(std::ostream &stream): content_out(stream), style_out(stream) { }
-			ansistream(std::ostream &c, std::ostream &s): content_out(c), style_out(s) { }
+			ansistream(std::ostream &stream): content_out(stream), style_out(stream) {}
+			ansistream(std::ostream &c, std::ostream &s): content_out(c), style_out(s) {}
 			ansistream & operator<<(const ansi::color &);
 			ansistream & operator<<(const ansi::color_pair &);
 			ansistream & operator<<(const ansi::style &);

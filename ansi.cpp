@@ -27,7 +27,7 @@ namespace ansi {
 		return {style, false};
 	}
 
-	ansistream::ansistream(): content_out(std::cout), style_out(std::cerr) { }
+	ansistream::ansistream(): content_out(std::cout), style_out(std::cerr) {}
 
 	ansistream & ansistream::operator<<(const ansi::color &c) {
 		// Adds a text color: "as << red"
