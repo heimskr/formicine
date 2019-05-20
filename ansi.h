@@ -30,17 +30,21 @@ namespace ansi {
 
 		color_pair(ansi::color color, ansi::color_type type): color(color), type(type) {}
 		color_pair(ansi::color color): color(color), type(text) {}
+
+		string left() const;
+		string right() const;
 	};
 
 	class ansistream {
 		private:
-			std::ostream &content_out;
-			std::ostream &style_out;
 			ansi::color text_color;
 			ansi::color bg_color;
 			std::unordered_set<ansi::style> styles;
 
 		public:
+			std::ostream &content_out;
+			std::ostream &style_out;
+
 			ansistream();
 			ansistream(std::ostream &stream): content_out(stream), style_out(stream) {}
 			ansistream(std::ostream &c, std::ostream &s): content_out(c), style_out(s) {}
@@ -53,8 +57,13 @@ namespace ansi {
 			ansistream & operator<<(std::ostream & (*fn)(std::ios &));
 			ansistream & operator<<(std::ostream & (*fn)(std::ios_base &));
 			ansistream & operator<<(const char *t);
+
 			template <typename T>
-			ansistream & operator<<(const T &);
+			ansistream & operator<<(const T &value) {
+				// Piping miscellaneous values into the ansistream simply forwards them as-is to the content stream.
+				content_out << value;
+				return *this;
+			}
 
 			ansistream & operator>>(const ansi::style &);
 	};
@@ -64,6 +73,8 @@ namespace ansi {
 	color_pair fg(ansi::color color);
 	color_pair bg(ansi::color color);
 	ansi_pair<ansi::style> remove(ansi::style);
+	string wrap(const string &, const color &);
+	string wrap(const string &, const style &);
 
 	const string reset_all = "\e[0m";
 	const string reset_fg  = "\e[39m";

@@ -14,5 +14,6 @@ int main(int, char **) {
 	   << endl;
 	as << "Normal" << ansi::yellow << " yellow " << bg(ansi::green) << "yellow+green" << ansi::normal << " normal+green"
 	   << fg(ansi::red) << " red+green" << bg(ansi::normal) << " red"
-	   << endl;
+	   << ansi::reset << endl;
+	as << "Normal " << ansi::wrap("bold", ansi::bold) << " not bold" << endl;
 }

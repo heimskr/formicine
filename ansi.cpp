@@ -27,6 +27,22 @@ namespace ansi {
 		return {style, false};
 	}
 
+	string wrap(const string &str, const ansi::color_pair &pair) {
+		return pair.left() + str + pair.right();
+	}
+
+	string wrap(const string &str, const ansi::style &style) {
+		return style_codes.at(style) + str + style_resets.at(style);
+	}
+
+	string color_pair::left() const {
+		return type == background? get_bg(color) : get_text(color);
+	}
+
+	string color_pair::right() const {
+		return type == background? reset_bg : reset_fg;
+	}
+
 	ansistream::ansistream(): content_out(std::cout), style_out(std::cerr) {}
 
 	ansistream & ansistream::operator<<(const ansi::color &c) {
@@ -94,18 +110,10 @@ namespace ansi {
 
 	ansistream & ansistream::operator<<(const char *t) { content_out << t; return *this; }
 
-	template <typename T>
-	ansistream & ansistream::operator<<(const T &value) {
-		// Piping miscellaneous values into the ansistream simply forwards them as-is to the content stream.
-		content_out << value;
-		return *this;
-	}
-
 	ansistream & ansistream::operator>>(const ansi::style &style) {
 		// Removes a style: "as >> bold"
 		styles.erase(style);
 		style_out << style_resets.at(style);
 		return *this;
 	}
-
 }
