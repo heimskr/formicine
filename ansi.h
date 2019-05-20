@@ -114,4 +114,10 @@ namespace ansi {
 	};
 }
 
+std::string operator"" _b(const char *str, unsigned long);
+std::string operator"" _d(const char *str, unsigned long);
+std::string operator"" _i(const char *str, unsigned long);
+std::string operator"" _u(const char *str, unsigned long);
+std::string operator"" _bd(const char *str, unsigned long);
+
 #endif

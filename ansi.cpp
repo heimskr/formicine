@@ -116,4 +116,11 @@ namespace ansi {
 		style_out << style_resets.at(style);
 		return *this;
 	}
+
 }
+
+std::string operator"" _b(const char *str, unsigned long) { return ansi::wrap(str, ansi::bold); }
+std::string operator"" _d(const char *str, unsigned long) { return ansi::wrap(str, ansi::dim); }
+std::string operator"" _i(const char *str, unsigned long) { return ansi::wrap(str, ansi::italic); }
+std::string operator"" _u(const char *str, unsigned long) { return ansi::wrap(str, ansi::underline); }
+std::string operator"" _bd(const char *str, unsigned long) { return ansi::wrap(ansi::wrap(str, ansi::bold), ansi::dim); }
