@@ -10,13 +10,13 @@ A simple C++ library that wraps ostreams for use with ANSI escapes.
 int main(int, char **) {
     ansi::ansistream as(std::cout, std::cerr);
 
-    as << "Normal text" << std::endl;
-    as << ansi::bold << "Bold text" << ansi::reset << std::endl;
-    as << fg(ansi::green) << "Green text" << ansi::reset << std::endl;
+    as << "Normal text\n";
+    as << ansi::bold << "Bold text" << ansi::reset << "\n";
+    as << fg(ansi::green) << "Green text" << ansi::reset << "\n";
     as << ansi::underline << "Underlined text,"
        << ansi::italic << " italic+underlined text"
        >> ansi::underline << " and just italic text."
-       << ansi::reset << std::endl;
+       << ansi::reset << "\n";
 }
 ```
 
