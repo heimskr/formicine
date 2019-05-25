@@ -7,6 +7,8 @@
 using std::string;
 
 namespace ansi {
+	ansistream out = {std::cout, std::cerr};
+
 	color_pair fg(ansi::color color) {
 		return {color, text};
 	}
@@ -29,6 +31,10 @@ namespace ansi {
 
 	string wrap(const string &str, const ansi::color_pair &pair) {
 		return pair.left() + str + pair.right();
+	}
+
+	string wrap(const string &str, const ansi::color &color) {
+		return wrap(str, color_pair(color));
 	}
 
 	string wrap(const string &str, const ansi::style &style) {

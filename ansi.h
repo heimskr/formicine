@@ -6,8 +6,6 @@
 #include <string>
 #include <unordered_set>
 
-using std::string;
-
 namespace ansi {
 	enum color {
 		normal, red, orange, yellow, yeen, green, blue, cyan, magenta, purple, black, gray, lightgray, white, pink, sky
@@ -31,8 +29,8 @@ namespace ansi {
 		color_pair(ansi::color color, ansi::color_type type): color(color), type(type) {}
 		color_pair(ansi::color color): color(color), type(text) {}
 
-		string left() const;
-		string right() const;
+		std::string left() const;
+		std::string right() const;
 	};
 
 	class ansistream {
@@ -68,19 +66,23 @@ namespace ansi {
 			ansistream & operator>>(const ansi::style &);
 	};
 
-	string get_text(const ansi::color &);
-	string get_bg(const ansi::color &);
+	extern ansistream out;
+	static std::string endl = "\e[0m\n";
+
+	std::string get_text(const ansi::color &);
+	std::string get_bg(const ansi::color &);
 	color_pair fg(ansi::color color);
 	color_pair bg(ansi::color color);
 	ansi_pair<ansi::style> remove(ansi::style);
-	string wrap(const string &, const color &);
-	string wrap(const string &, const style &);
+	std::string wrap(const std::string &, const color_pair &);
+	std::string wrap(const std::string &, const color &);
+	std::string wrap(const std::string &, const style &);
 
-	const string reset_all = "\e[0m";
-	const string reset_fg  = "\e[39m";
-	const string reset_bg  = "\e[49m";
+	const std::string reset_all = "\e[0m";
+	const std::string reset_fg  = "\e[39m";
+	const std::string reset_bg  = "\e[49m";
 
-	const std::map<color, string> color_bases = {
+	const std::map<color, std::string> color_bases = {
 		{normal,    "9"},
 		{red,       "1"},
 		{orange,    "8;5;202"},
@@ -99,14 +101,14 @@ namespace ansi {
 		{sky,       "8;5;153"},
 	};
 
-	const std::map<style, string> style_codes = {
+	const std::map<style, std::string> style_codes = {
 		{bold,      "\e[1m"},
 		{dim,       "\e[2m"},
 		{italic,    "\e[3m"},
 		{underline, "\e[4m"},
 	};
 
-	const std::map<style, string> style_resets = {
+	const std::map<style, std::string> style_resets = {
 		{bold,      "\e[22m"},
 		{dim,       "\e[22m"},
 		{italic,    "\e[23m"},
