@@ -51,6 +51,23 @@ namespace ansi {
 
 	ansistream::ansistream(): content_out(std::cout), style_out(std::cerr) {}
 
+	void ansistream::left() {
+		if (parens_on) {
+			*this << dim;
+			content_out << "(";
+			*this >> dim;
+		}
+	}
+
+	void ansistream::right() {
+		if (parens_on) {
+			parens_on = false;
+			*this << dim;
+			content_out << ")";
+			*this >> dim;
+		}
+	}
+
 	ansistream & ansistream::operator<<(const ansi::color &c) {
 		// Adds a text color: "as << red"
 		text_color = c;
@@ -63,11 +80,10 @@ namespace ansi {
 		// - "as << fg(red)"
 		// - "as << bg(red)"
 
-		if (p.type == background) {
+		if (p.type == background)
 			style_out << get_bg(bg_color = p.color);
-		} else {
+		else
 			style_out << get_text(text_color = p.color);
-		}
 
 		return *this;
 	}
@@ -81,20 +97,29 @@ namespace ansi {
 
 	ansistream & ansistream::operator<<(const ansi::ansi_pair<ansi::style> &pair) {
 		// Removes a style: "as << remove(bold)"
-		if (pair.add) {
+		if (pair.add)
 			return *this << pair.value;
-		}
-
 		return *this >> pair.value;
 	}
 
 	ansistream & ansistream::operator<<(const ansi::action &action) {
 		// Performs an action on the stream: "as << reset"
-		if (action == reset) {
-			return *this << reset_all;
+		switch (action) {
+			case end_line:      *this << "\e[0m" << std::endl; break;
+			case reset:         *this << reset_all; break;
+			case check:         *this << "["_d << wrap(str_check,   ansi::green)  << "] "_d; break;
+			case nope:          *this << "["_d << wrap(str_nope,    ansi::red)    << "] "_d; break;
+			case warning:       *this << "["_d << wrap("~", ansi::yellow) << "] "_d; break;
+			case open_paren:    *this << wrap("(", dim); break;
+			case close_paren:   *this << wrap(")", dim); break;
+			case enable_parens: parens_on = true; break;
+			default:
+				throw std::invalid_argument("Invalid action: " + std::to_string(action));
 		}
 
-		throw std::invalid_argument("Invalid action");
+		this->content_out.flush();
+		this->style_out.flush();
+		return *this;
 	}
 
 	// These next three are for manipulator support.
@@ -114,7 +139,12 @@ namespace ansi {
 		return *this;
 	}
 
-	ansistream & ansistream::operator<<(const char *t) { content_out << t; return *this; }
+	ansistream & ansistream::operator<<(const char *t) {
+		left();
+		content_out << t;
+		right();
+		return *this;
+	}
 
 	ansistream & ansistream::operator>>(const ansi::style &style) {
 		// Removes a style: "as >> bold"

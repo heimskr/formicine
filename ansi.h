@@ -13,7 +13,7 @@ namespace ansi {
 
 	enum style {bold, dim, italic, underline};
 	enum color_type {text, background};
-	enum action {reset};
+	enum action {reset, end_line, check, nope, warning, open_paren, close_paren, enable_parens};
 
 	template <typename T>
 	struct ansi_pair {
@@ -38,6 +38,9 @@ namespace ansi {
 			ansi::color text_color;
 			ansi::color bg_color;
 			std::unordered_set<ansi::style> styles;
+			bool parens_on = false;
+			void left();
+			void right();
 
 		public:
 			std::ostream &content_out;
@@ -59,7 +62,9 @@ namespace ansi {
 			template <typename T>
 			ansistream & operator<<(const T &value) {
 				// Piping miscellaneous values into the ansistream simply forwards them as-is to the content stream.
+				left();
 				content_out << value;
+				right();
 				return *this;
 			}
 
@@ -67,7 +72,13 @@ namespace ansi {
 	};
 
 	extern ansistream out;
-	static std::string endl = "\e[0m\n";
+	static action endl   = action::end_line;
+	static action good   = action::check;
+	static action bad    = action::nope;
+	static action warn   = action::warning;
+	static action oparen = action::open_paren;
+	static action cparen = action::close_paren;
+	static action parens = action::enable_parens;
 
 	std::string get_text(const ansi::color &);
 	std::string get_bg(const ansi::color &);
@@ -81,6 +92,10 @@ namespace ansi {
 	const std::string reset_all = "\e[0m";
 	const std::string reset_fg  = "\e[39m";
 	const std::string reset_bg  = "\e[49m";
+
+	const std::string str_check   = "\u2714";
+	const std::string str_nope    = "\u2718";
+	const std::string str_warning = "\u26a0\ufe0f";
 
 	const std::map<color, std::string> color_bases = {
 		{normal,    "9"},
