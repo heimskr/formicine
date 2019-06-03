@@ -88,6 +88,9 @@ namespace ansi {
 	std::string wrap(const std::string &, const color_pair &);
 	std::string wrap(const std::string &, const color &);
 	std::string wrap(const std::string &, const style &);
+	void clear();
+	void jump(int, int);
+	void jump();
 
 	const std::string reset_all = "\e[0m";
 	const std::string reset_fg  = "\e[39m";

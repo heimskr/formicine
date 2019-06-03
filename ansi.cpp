@@ -41,6 +41,20 @@ namespace ansi {
 		return style_codes.at(style) + str + style_resets.at(style);
 	}
 
+	void clear() {
+		std::cout << "\e[2J";
+		std::cout.flush();
+	}
+
+	void jump(int row, int col) {
+		std::cout << "\e[" << row << ";" << col << "H";
+		std::cout.flush();
+	}
+
+	void jump() {
+		jump(1, 1);
+	}
+
 	string color_pair::left() const {
 		return type == background? get_bg(color) : get_text(color);
 	}
@@ -152,7 +166,6 @@ namespace ansi {
 		style_out << style_resets.at(style);
 		return *this;
 	}
-
 }
 
 std::string operator"" _b(const char *str, unsigned long) { return ansi::wrap(str, ansi::bold); }
