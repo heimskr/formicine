@@ -51,12 +51,12 @@ namespace ansi {
 	}
 
 	void jump(int row, int col) {
-		std::cout << "\e[" << row << ";" << col << "H";
+		std::cout << "\e[" << (row + 1) << ";" << (col + 1) << "H";
 		std::cout.flush();
 	}
 
 	void jump() {
-		jump(1, 1);
+		jump(0, 0);
 	}
 
 	void save() {

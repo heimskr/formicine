@@ -90,14 +90,27 @@ namespace ansi {
 	std::string wrap(const std::string &, const style &);
 	void write(const std::string &);
 	void clear();
+
+	/** Moves the cursor to a given position. Arguments are expected to be zero-based. */
 	void jump(int row, int col);
+	/** Moves the cursor to the top-left corner. */
 	void jump();
+
+	/** Saves the cursor position via CSI s. */
 	void save();
+	/** Restores the cursor position via CSI u. */
 	void restore();
+
+	/** Clears the entire line at the cursor. */
 	void clear_line();
+	/** Clears all text to the left of the cursor. */
 	void clear_left();
+	/** Clears all text to the right of the cursor. */
 	void clear_right();
+
+	/** Moves the cursor up by a given offset. */
 	void up(size_t);
+	/** Moves the cursor down by a given offset. */
 	void down(size_t);
 
 	const std::string reset_all = "\e[0m";
