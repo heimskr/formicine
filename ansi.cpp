@@ -41,9 +41,13 @@ namespace ansi {
 		return style_codes.at(style) + str + style_resets.at(style);
 	}
 
-	void clear() {
-		std::cout << "\e[2J";
+	void write(const std::string &str) {
+		std::cout << str;
 		std::cout.flush();
+	}
+
+	void clear() {
+		write("\e[2J");
 	}
 
 	void jump(int row, int col) {
@@ -53,6 +57,36 @@ namespace ansi {
 
 	void jump() {
 		jump(1, 1);
+	}
+
+	void save() {
+		write("\e[s");
+	}
+
+	void restore() {
+		write("\e[u");
+	}
+
+	void clear_line() {
+		write("\e[2K");
+	}
+
+	void clear_left() {
+		write("\e[1K");
+	}
+
+	void clear_right() {
+		write("\e[K");
+	}
+
+	void up(size_t rows) {
+		if (rows != 0)
+			write("\e[" + std::to_string(rows) + "A");
+	}
+
+	void down(size_t rows) {
+		if (rows != 0)
+			write("\e[" + std::to_string(rows) + "B");
 	}
 
 	string color_pair::left() const {

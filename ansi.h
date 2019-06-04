@@ -88,9 +88,17 @@ namespace ansi {
 	std::string wrap(const std::string &, const color_pair &);
 	std::string wrap(const std::string &, const color &);
 	std::string wrap(const std::string &, const style &);
+	void write(const std::string &);
 	void clear();
 	void jump(int row, int col);
 	void jump();
+	void save();
+	void restore();
+	void clear_line();
+	void clear_left();
+	void clear_right();
+	void up(size_t);
+	void down(size_t);
 
 	const std::string reset_all = "\e[0m";
 	const std::string reset_fg  = "\e[39m";
