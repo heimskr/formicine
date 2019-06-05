@@ -49,6 +49,7 @@ namespace ansi {
 			ansistream();
 			ansistream(std::ostream &stream): content_out(stream), style_out(stream) {}
 			ansistream(std::ostream &c, std::ostream &s): content_out(c), style_out(s) {}
+			void flush();
 			ansistream & operator<<(const ansi::color &);
 			ansistream & operator<<(const ansi::color_pair &);
 			ansistream & operator<<(const ansi::style &);

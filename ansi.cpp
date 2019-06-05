@@ -126,6 +126,11 @@ namespace ansi {
 		}
 	}
 
+	void ansistream::flush() {
+		content_out.flush();
+		style_out.flush();
+	}
+
 	ansistream & ansistream::operator<<(const ansi::color &c) {
 		// Adds a text color: "as << red"
 		text_color = c;
