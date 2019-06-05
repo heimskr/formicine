@@ -50,8 +50,8 @@ namespace ansi {
 		write("\e[2J");
 	}
 
-	void jump(int row, int col) {
-		std::cout << "\e[" << (row + 1) << ";" << (col + 1) << "H";
+	void jump(int x, int y) {
+		std::cout << "\e[" << (y + 1) << ";" << (x + 1) << "H";
 		std::cout.flush();
 	}
 
@@ -87,6 +87,16 @@ namespace ansi {
 	void down(size_t rows) {
 		if (rows != 0)
 			write("\e[" + std::to_string(rows) + "B");
+	}
+
+	void right(size_t cols) {
+		if (cols != 0)
+			write("\e[" + std::to_string(cols) + "C");
+	}
+
+	void left(size_t cols) {
+		if (cols != 0)
+			write("\e[" + std::to_string(cols) + "D");
 	}
 
 	string color_pair::left() const {

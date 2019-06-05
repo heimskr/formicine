@@ -92,7 +92,7 @@ namespace ansi {
 	void clear();
 
 	/** Moves the cursor to a given position. Arguments are expected to be zero-based. */
-	void jump(int row, int col);
+	void jump(int x, int y);
 	/** Moves the cursor to the top-left corner. */
 	void jump();
 
@@ -108,10 +108,11 @@ namespace ansi {
 	/** Clears all text to the right of the cursor. */
 	void clear_right();
 
-	/** Moves the cursor up by a given offset. */
-	void up(size_t);
-	/** Moves the cursor down by a given offset. */
-	void down(size_t);
+	// These functions move the cursor in one direction by a given offset.
+	void up(size_t = 1);
+	void down(size_t = 1);
+	void right(size_t = 1);
+	void left(size_t = 1);
 
 	const std::string reset_all = "\e[0m";
 	const std::string reset_fg  = "\e[39m";
