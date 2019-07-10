@@ -117,6 +117,10 @@ namespace ansi {
 		write("\e[" + std::to_string(lines) + "T");
 	}
 
+	void delete_chars(size_t count) { // DCH
+		write("\e[" + std::to_string(count) + "P");
+	}
+
 	std::string strip(const std::string &str) {
 		std::string out = "";
 		size_t len = str.length();
