@@ -117,6 +117,23 @@ namespace ansi {
 		write("\e[" + std::to_string(lines) + "T");
 	}
 
+	std::string strip(const std::string &str) {
+		std::string out = "";
+		size_t len = str.length();
+		char c;
+		for (size_t i = 0; i < len; ++i) {
+			c = str[i];
+			if (c != '\x1b') {
+				out.push_back(c);
+				continue;
+			}
+
+			for (; str[i] < 0x40 || 0x7e < str[i]; ++i);
+		}
+
+		return out;
+	}
+
 	string color_pair::left() const {
 		return type == background? get_bg(color) : get_text(color);
 	}

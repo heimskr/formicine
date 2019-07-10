@@ -125,6 +125,9 @@ namespace ansi {
 	/** Scrolls down by a number of lines. Lines at the top are replaced with blank lines. */
 	void scroll_down(size_t);
 
+	/** Strips the ANSI escape sequences from a string. */
+	std::string strip(const std::string &);
+
 	const std::string reset_all = "\e[0m";
 	const std::string reset_fg  = "\e[39m";
 	const std::string reset_bg  = "\e[49m";
