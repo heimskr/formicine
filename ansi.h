@@ -115,6 +115,16 @@ namespace ansi {
 	void right(size_t = 1);
 	void left(size_t = 1);
 
+	/** Sets the absolute vertical position of the cursor. Zero-based. */
+	void vpos(size_t);
+	/** Sets the absolute horizontal position of the cursor. Zero-based. */
+	void hpos(size_t);
+
+	/** Scrolls up by a number of lines. Lines at the bottom are replaced with blank lines. */
+	void scroll_up(size_t);
+	/** Scrolls down by a number of lines. Lines at the top are replaced with blank lines. */
+	void scroll_down(size_t);
+
 	const std::string reset_all = "\e[0m";
 	const std::string reset_fg  = "\e[39m";
 	const std::string reset_bg  = "\e[49m";

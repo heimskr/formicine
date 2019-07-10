@@ -99,6 +99,24 @@ namespace ansi {
 			write("\e[" + std::to_string(cols) + "D");
 	}
 
+	void vpos(int y) {
+		up(999999);
+		if (y > 0)
+			down(y);
+	}
+
+	void hpos(int x) {
+		write("\e[" + std::to_string(x + 1) + "H");
+	}
+
+	void scroll_up(size_t lines) {
+		write("\e[" + std::to_string(lines) + "S");
+	}
+
+	void scroll_down(size_t lines) {
+		write("\e[" + std::to_string(lines) + "T");
+	}
+
 	string color_pair::left() const {
 		return type == background? get_bg(color) : get_text(color);
 	}
