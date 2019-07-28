@@ -148,6 +148,11 @@ namespace ansi {
 
 	ansistream::ansistream(): content_out(std::cout), style_out(std::cerr) {}
 
+	ansistream & ansistream::err() {
+		static ansistream as(std::cerr, std::cerr);
+		return as;
+	}
+
 	void ansistream::left() {
 		if (parens_on) {
 			*this << dim;
