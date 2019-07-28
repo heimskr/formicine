@@ -13,7 +13,7 @@ namespace ansi {
 
 	enum style {bold, dim, italic, underline};
 	enum color_type {text, background};
-	enum action {reset, end_line, check, nope, warning, open_paren, close_paren, enable_parens};
+	enum action {reset, end_line, check, nope, warning, information, open_paren, close_paren, enable_parens};
 
 	template <typename T>
 	struct ansi_pair {
@@ -78,6 +78,7 @@ namespace ansi {
 	static action good   = action::check;
 	static action bad    = action::nope;
 	static action warn   = action::warning;
+	static action info   = action::information;
 	static action oparen = action::open_paren;
 	static action cparen = action::close_paren;
 	static action parens = action::enable_parens;

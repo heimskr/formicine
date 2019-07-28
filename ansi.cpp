@@ -214,9 +214,10 @@ namespace ansi {
 		switch (action) {
 			case end_line:      *this << "\e[0m" << std::endl; break;
 			case reset:         *this << reset_all; break;
-			case check:         *this << "["_d << wrap(str_check,   ansi::green)  << "] "_d; break;
-			case nope:          *this << "["_d << wrap(str_nope,    ansi::red)    << "] "_d; break;
-			case warning:       *this << "["_d << wrap("~", ansi::yellow) << "] "_d; break;
+			case check:         *this << "["_d << wrap(str_check, ansi::green)  << "] "_d; break;
+			case nope:          *this << "["_d << wrap(str_nope,  ansi::red)    << "] "_d; break;
+			case warning:       *this << "["_d << wrap("~",       ansi::yellow) << "] "_d; break;
+			case information:   *this << "["_d << wrap("i",       ansi::blue)   << "] "_d; break;
 			case open_paren:    *this << wrap("(", dim); break;
 			case close_paren:   *this << wrap(")", dim); break;
 			case enable_parens: parens_on = true; break;
