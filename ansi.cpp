@@ -41,84 +41,13 @@ namespace ansi {
 		return style_codes.at(style) + str + style_resets.at(style);
 	}
 
+	void write(std::ostream &os, const std::string &str) {
+		os << str;
+		os.flush();
+	}
+
 	void write(const std::string &str) {
-		std::cout << str;
-		std::cout.flush();
-	}
-
-	void clear() {
-		write("\e[2J");
-	}
-
-	void jump(int x, int y) {
-		std::cout << "\e[" << (y + 1) << ";" << (x + 1) << "H";
-		std::cout.flush();
-	}
-
-	void jump() {
-		jump(0, 0);
-	}
-
-	void save() {
-		write("\e[s");
-	}
-
-	void restore() {
-		write("\e[u");
-	}
-
-	void clear_line() {
-		write("\e[2K");
-	}
-
-	void clear_left() {
-		write("\e[1K");
-	}
-
-	void clear_right() {
-		write("\e[K");
-	}
-
-	void up(size_t rows) {
-		if (rows != 0)
-			write("\e[" + std::to_string(rows) + "A");
-	}
-
-	void down(size_t rows) {
-		if (rows != 0)
-			write("\e[" + std::to_string(rows) + "B");
-	}
-
-	void right(size_t cols) {
-		if (cols != 0)
-			write("\e[" + std::to_string(cols) + "C");
-	}
-
-	void left(size_t cols) {
-		if (cols != 0)
-			write("\e[" + std::to_string(cols) + "D");
-	}
-
-	void vpos(int y) {
-		up(999999);
-		if (y > 0)
-			down(y);
-	}
-
-	void hpos(int x) {
-		write("\e[" + std::to_string(x + 1) + "H");
-	}
-
-	void scroll_up(size_t lines) {
-		write("\e[" + std::to_string(lines) + "S");
-	}
-
-	void scroll_down(size_t lines) {
-		write("\e[" + std::to_string(lines) + "T");
-	}
-
-	void delete_chars(size_t count) { // DCH
-		write("\e[" + std::to_string(count) + "P");
+		write(std::cout, str);
 	}
 
 	std::string strip(const std::string &str) {
@@ -153,7 +82,7 @@ namespace ansi {
 		return as;
 	}
 
-	void ansistream::left() {
+	void ansistream::left_paren() {
 		if (parens_on) {
 			*this << dim;
 			content_out << "(";
@@ -161,7 +90,7 @@ namespace ansi {
 		}
 	}
 
-	void ansistream::right() {
+	void ansistream::right_paren() {
 		if (parens_on) {
 			parens_on = false;
 			*this << dim;
@@ -173,6 +102,80 @@ namespace ansi {
 	void ansistream::flush() {
 		content_out.flush();
 		style_out.flush();
+	}
+
+	void ansistream::clear() {
+		style_out << "\e[2J";
+	}
+
+	void ansistream::jump(int x, int y) {
+		style_out << "\e[" << (y + 1) << ";" << (x + 1) << "H";
+	}
+
+	void ansistream::jump() {
+		jump(0, 0);
+	}
+
+	void ansistream::save() {
+		style_out << "\e[s";
+	}
+
+	void ansistream::restore() {
+		style_out << "\e[u";
+	}
+
+	void ansistream::clear_line() {
+		style_out << "\e[2K";
+	}
+
+	void ansistream::clear_left() {
+		style_out << "\e[1K";
+	}
+
+	void ansistream::clear_right() {
+		style_out << "\e[K";
+	}
+
+	void ansistream::up(size_t rows) {
+		if (rows != 0)
+			style_out << "\e[" + std::to_string(rows) + "A";
+	}
+
+	void ansistream::down(size_t rows) {
+		if (rows != 0)
+			style_out << "\e[" + std::to_string(rows) + "B";
+	}
+
+	void ansistream::right(size_t cols) {
+		if (cols != 0)
+			style_out << "\e[" + std::to_string(cols) + "C";
+	}
+
+	void ansistream::left(size_t cols) {
+		if (cols != 0)
+			style_out << "\e[" + std::to_string(cols) + "D";
+	}
+
+	void ansistream::vpos(size_t y) {
+		up(999999);
+		if (y > 0)
+			down(y);
+	}
+
+	void ansistream::hpos(size_t x) {
+		style_out << "\e[" + std::to_string(x + 1) + "H";
+	}
+
+	void ansistream::scroll_up(size_t lines) {
+		style_out << "\e[" + std::to_string(lines) + "S";
+	}
+
+	void ansistream::scroll_down(size_t lines) {
+		style_out << "\e[" + std::to_string(lines) + "T";
+	}
+
+	void ansistream::delete_chars(size_t count) { // DCH
+		style_out << "\e[" + std::to_string(count) + "P";
 	}
 
 	ansistream & ansistream::operator<<(const ansi::color &c) {
@@ -248,9 +251,9 @@ namespace ansi {
 	}
 
 	ansistream & ansistream::operator<<(const char *t) {
-		left();
+		left_paren();
 		content_out << t;
-		right();
+		right_paren();
 		return *this;
 	}
 
