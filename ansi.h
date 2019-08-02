@@ -102,9 +102,9 @@ namespace ansi {
 			template <typename T>
 			ansistream & operator<<(const T &value) {
 				// Piping miscellaneous values into the ansistream simply forwards them as-is to the content stream.
-				left();
+				left_paren();
 				content_out << value;
-				right();
+				right_paren();
 				return *this;
 			}
 
