@@ -10,11 +10,11 @@ namespace ansi {
 	ansistream out = {std::cout, std::cerr};
 
 	color_pair fg(ansi::color color) {
-		return {color, text};
+		return {color, color_type::text};
 	}
 
 	color_pair bg(ansi::color color) {
-		return {color, background};
+		return {color, color_type::background};
 	}
 
 	string get_text(const ansi::color &color) {
@@ -68,11 +68,11 @@ namespace ansi {
 	}
 
 	string color_pair::left() const {
-		return type == background? get_bg(color) : get_text(color);
+		return type == color_type::background? get_bg(color) : get_text(color);
 	}
 
 	string color_pair::right() const {
-		return type == background? reset_bg : reset_fg;
+		return type == color_type::background? reset_bg : reset_fg;
 	}
 
 	ansistream::ansistream(): content_out(std::cout), style_out(std::cerr) {}
@@ -84,9 +84,9 @@ namespace ansi {
 
 	ansistream & ansistream::left_paren() {
 		if (parens_on) {
-			*this << dim;
+			*this << style::dim;
 			content_out << "(";
-			*this >> dim;
+			*this >> style::dim;
 		}
 
 		return *this;
@@ -95,9 +95,9 @@ namespace ansi {
 	ansistream & ansistream::right_paren() {
 		if (parens_on) {
 			parens_on = false;
-			*this << dim;
+			*this << style::dim;
 			content_out << ")";
-			*this >> dim;
+			*this >> style::dim;
 		}
 
 		return *this;
@@ -276,7 +276,7 @@ namespace ansi {
 		// - "as << fg(red)"
 		// - "as << bg(red)"
 
-		if (p.type == background)
+		if (p.type == color_type::background)
 			style_out << get_bg(bg_color = p.color);
 		else
 			style_out << get_text(text_color = p.color);
@@ -301,17 +301,17 @@ namespace ansi {
 	ansistream & ansistream::operator<<(const ansi::action &action) {
 		// Performs an action on the stream: "as << reset"
 		switch (action) {
-			case end_line:      *this << "\e[0m" << std::endl; break;
-			case reset:         *this << reset_all; break;
-			case check:         *this << "["_d << wrap(str_check, ansi::green)  << "] "_d; break;
-			case nope:          *this << "["_d << wrap(str_nope,  ansi::red)    << "] "_d; break;
-			case warning:       *this << "["_d << wrap("~",       ansi::yellow) << "] "_d; break;
-			case information:   *this << "["_d << wrap("i",       ansi::blue)   << "] "_d; break;
-			case open_paren:    *this << wrap("(", dim); break;
-			case close_paren:   *this << wrap(")", dim); break;
-			case enable_parens: parens_on = true; break;
+			case action::end_line:      *this << "\e[0m" << std::endl; break;
+			case action::reset:         *this << reset_all; break;
+			case action::check:         *this << "["_d << wrap(str_check, color::green)  << "] "_d; break;
+			case action::nope:          *this << "["_d << wrap(str_nope,  color::red)    << "] "_d; break;
+			case action::warning:       *this << "["_d << wrap("~",       color::yellow) << "] "_d; break;
+			case action::information:   *this << "["_d << wrap("i",       color::blue)   << "] "_d; break;
+			case action::open_paren:    *this << wrap("(", style::dim); break;
+			case action::close_paren:   *this << wrap(")", style::dim); break;
+			case action::enable_parens: parens_on = true; break;
 			default:
-				throw std::invalid_argument("Invalid action: " + std::to_string(action));
+				throw std::invalid_argument("Invalid action: " + std::to_string(static_cast<int>(action)));
 		}
 
 		this->content_out.flush();
@@ -351,8 +351,10 @@ namespace ansi {
 	}
 }
 
-std::string operator"" _b(const char *str, unsigned long) { return ansi::wrap(str, ansi::bold); }
-std::string operator"" _d(const char *str, unsigned long) { return ansi::wrap(str, ansi::dim); }
-std::string operator"" _i(const char *str, unsigned long) { return ansi::wrap(str, ansi::italic); }
-std::string operator"" _u(const char *str, unsigned long) { return ansi::wrap(str, ansi::underline); }
-std::string operator"" _bd(const char *str, unsigned long) { return ansi::wrap(ansi::wrap(str, ansi::bold), ansi::dim); }
+std::string operator"" _b(const char *str, unsigned long) { return ansi::wrap(str, ansi::style::bold); }
+std::string operator"" _d(const char *str, unsigned long) { return ansi::wrap(str, ansi::style::dim); }
+std::string operator"" _i(const char *str, unsigned long) { return ansi::wrap(str, ansi::style::italic); }
+std::string operator"" _u(const char *str, unsigned long) { return ansi::wrap(str, ansi::style::underline); }
+std::string operator"" _bd(const char *str, unsigned long) {
+	return ansi::wrap(ansi::wrap(str, ansi::style::bold), ansi::style::dim);
+}

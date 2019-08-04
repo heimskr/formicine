@@ -7,13 +7,13 @@
 #include <unordered_set>
 
 namespace ansi {
-	enum class color {
+	enum class color: int {
 		normal, red, orange, yellow, yeen, green, blue, cyan, magenta, purple, black, gray, lightgray, white, pink, sky
 	};
 
 	enum class style {bold, dim, italic, underline};
 	enum class color_type {text, background};
-	enum class action {reset, end_line, check, nope, warning, information, open_paren, close_paren, enable_parens};
+	enum class action: int {reset, end_line, check, nope, warning, information, open_paren, close_paren, enable_parens};
 
 	template <typename T>
 	struct ansi_pair {
@@ -27,7 +27,7 @@ namespace ansi {
 		ansi::color_type type;
 
 		color_pair(ansi::color color, ansi::color_type type): color(color), type(type) {}
-		color_pair(ansi::color color): color(color), type(text) {}
+		color_pair(ansi::color color): color(color), type(color_type::text) {}
 
 		std::string left() const;
 		std::string right() const;
@@ -166,36 +166,36 @@ namespace ansi {
 	const std::string str_warning = "\u26a0\ufe0f";
 
 	const std::map<color, std::string> color_bases = {
-		{normal,    "9"},
-		{red,       "1"},
-		{orange,    "8;5;202"},
-		{yellow,    "3"},
-		{yeen,      "8;5;112"},
-		{green,     "2"},
-		{blue,      "4"},
-		{cyan,      "6"},
-		{magenta,   "5"},
-		{purple,    "8;5;56"},
-		{black,     "0"},
-		{gray,      "8;5;8"},
-		{lightgray, "8;5;7"},
-		{white,     "7"},
-		{pink,      "8;5;219"},
-		{sky,       "8;5;153"},
+		{color::normal,    "9"},
+		{color::red,       "1"},
+		{color::orange,    "8;5;202"},
+		{color::yellow,    "3"},
+		{color::yeen,      "8;5;112"},
+		{color::green,     "2"},
+		{color::blue,      "4"},
+		{color::cyan,      "6"},
+		{color::magenta,   "5"},
+		{color::purple,    "8;5;56"},
+		{color::black,     "0"},
+		{color::gray,      "8;5;8"},
+		{color::lightgray, "8;5;7"},
+		{color::white,     "7"},
+		{color::pink,      "8;5;219"},
+		{color::sky,       "8;5;153"},
 	};
 
 	const std::map<style, std::string> style_codes = {
-		{bold,      "\e[1m"},
-		{dim,       "\e[2m"},
-		{italic,    "\e[3m"},
-		{underline, "\e[4m"},
+		{style::bold,      "\e[1m"},
+		{style::dim,       "\e[2m"},
+		{style::italic,    "\e[3m"},
+		{style::underline, "\e[4m"},
 	};
 
 	const std::map<style, std::string> style_resets = {
-		{bold,      "\e[22m"},
-		{dim,       "\e[22m"},
-		{italic,    "\e[23m"},
-		{underline, "\e[24m"},
+		{style::bold,      "\e[22m"},
+		{style::dim,       "\e[22m"},
+		{style::italic,    "\e[23m"},
+		{style::underline, "\e[24m"},
 	};
 }
 
