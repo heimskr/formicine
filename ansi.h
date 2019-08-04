@@ -7,13 +7,13 @@
 #include <unordered_set>
 
 namespace ansi {
-	enum color {
+	enum class color {
 		normal, red, orange, yellow, yeen, green, blue, cyan, magenta, purple, black, gray, lightgray, white, pink, sky
 	};
 
-	enum style {bold, dim, italic, underline};
-	enum color_type {text, background};
-	enum action {reset, end_line, check, nope, warning, information, open_paren, close_paren, enable_parens};
+	enum class style {bold, dim, italic, underline};
+	enum class color_type {text, background};
+	enum class action {reset, end_line, check, nope, warning, information, open_paren, close_paren, enable_parens};
 
 	template <typename T>
 	struct ansi_pair {
