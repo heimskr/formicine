@@ -12,7 +12,7 @@ namespace ansi {
 	};
 
 	enum class style {bold, dim, italic, underline};
-	enum class color_type {background, foreground};
+	enum class color_type: int {background = 1, foreground = 2, both = 3};
 	enum class action: int {reset, end_line, check, nope, warning, information, open_paren, close_paren, enable_parens};
 
 	template <typename T>
@@ -146,8 +146,8 @@ namespace ansi {
 	static action cparen = action::close_paren;
 	static action parens = action::enable_parens;
 
-	std::string get_fg(const ansi::color &);
-	std::string get_bg(const ansi::color &);
+	std::string get_fg(ansi::color);
+	std::string get_bg(ansi::color);
 	color_pair fg(ansi::color color);
 	color_pair bg(ansi::color color);
 	ansi_pair<ansi::style> remove(ansi::style);
@@ -156,6 +156,7 @@ namespace ansi {
 	std::string wrap(const std::string &, const style &);
 	void write(std::ostream &, const std::string &);
 	void write(const std::string &);
+	std::string get_name(ansi::color);
 
 	/** Strips the ANSI escape sequences from a string. */
 	std::string strip(const std::string &);
@@ -167,6 +168,25 @@ namespace ansi {
 	const std::string str_check   = "\u2714";
 	const std::string str_nope    = "\u2718";
 	const std::string str_warning = "\u26a0\ufe0f";
+
+	const std::map<color, std::string> color_names = {
+		{color::normal,    "normal"},
+		{color::red,       "red"},
+		{color::orange,    "orange"},
+		{color::yellow,    "yellow"},
+		{color::yeen,      "yeen"},
+		{color::green,     "green"},
+		{color::blue,      "blue"},
+		{color::cyan,      "cyan"},
+		{color::magenta,   "magenta"},
+		{color::purple,    "purple"},
+		{color::black,     "black"},
+		{color::gray,      "gray"},
+		{color::lightgray, "light gray"},
+		{color::white,     "white"},
+		{color::pink,      "pink"},
+		{color::sky,       "sky"},
+	};
 
 	const std::map<color, std::string> color_bases = {
 		{color::normal,    "9"},

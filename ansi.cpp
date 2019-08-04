@@ -17,11 +17,11 @@ namespace ansi {
 		return {color, color_type::background};
 	}
 
-	string get_fg(const ansi::color &color) {
+	string get_fg(ansi::color color) {
 		return "\e[3" + color_bases.at(color) + "m";
 	}
 
-	string get_bg(const ansi::color &color) {
+	string get_bg(ansi::color color) {
 		return "\e[4" + color_bases.at(color) + "m";
 	}
 
@@ -48,6 +48,10 @@ namespace ansi {
 
 	void write(const std::string &str) {
 		write(std::cout, str);
+	}
+
+	std::string get_name(ansi::color color) {
+		return get_fg(color) + color_names.at(color) + reset_fg;
 	}
 
 	std::string strip(const std::string &str) {
