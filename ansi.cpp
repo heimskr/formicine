@@ -82,100 +82,122 @@ namespace ansi {
 		return as;
 	}
 
-	void ansistream::left_paren() {
+	ansistream & ansistream::left_paren() {
 		if (parens_on) {
 			*this << dim;
 			content_out << "(";
 			*this >> dim;
 		}
+
+		return *this;
 	}
 
-	void ansistream::right_paren() {
+	ansistream & ansistream::right_paren() {
 		if (parens_on) {
 			parens_on = false;
 			*this << dim;
 			content_out << ")";
 			*this >> dim;
 		}
+
+		return *this;
 	}
 
-	void ansistream::flush() {
+	ansistream & ansistream::flush() {
 		content_out.flush();
 		style_out.flush();
+		return *this;
 	}
 
-	void ansistream::clear() {
+	ansistream & ansistream::clear() {
 		style_out << "\e[2J";
+		return *this;
 	}
 
-	void ansistream::jump(int x, int y) {
+	ansistream & ansistream::jump(int x, int y) {
 		style_out << "\e[" << (y + 1) << ";" << (x + 1) << "H";
+		return *this;
 	}
 
-	void ansistream::jump() {
+	ansistream & ansistream::jump() {
 		jump(0, 0);
+		return *this;
 	}
 
-	void ansistream::save() {
+	ansistream & ansistream::save() {
 		style_out << "\e[s";
+		return *this;
 	}
 
-	void ansistream::restore() {
+	ansistream & ansistream::restore() {
 		style_out << "\e[u";
+		return *this;
 	}
 
-	void ansistream::clear_line() {
+	ansistream & ansistream::clear_line() {
 		style_out << "\e[2K";
+		return *this;
 	}
 
-	void ansistream::clear_left() {
+	ansistream & ansistream::clear_left() {
 		style_out << "\e[1K";
+		return *this;
 	}
 
-	void ansistream::clear_right() {
+	ansistream & ansistream::clear_right() {
 		style_out << "\e[K";
+		return *this;
 	}
 
-	void ansistream::up(size_t rows) {
+	ansistream & ansistream::up(size_t rows) {
 		if (rows != 0)
 			style_out << "\e[" + std::to_string(rows) + "A";
+		return *this;
 	}
 
-	void ansistream::down(size_t rows) {
+	ansistream & ansistream::down(size_t rows) {
 		if (rows != 0)
 			style_out << "\e[" + std::to_string(rows) + "B";
+		return *this;
 	}
 
-	void ansistream::right(size_t cols) {
+	ansistream & ansistream::right(size_t cols) {
 		if (cols != 0)
 			style_out << "\e[" + std::to_string(cols) + "C";
+		return *this;
 	}
 
-	void ansistream::left(size_t cols) {
+	ansistream & ansistream::left(size_t cols) {
 		if (cols != 0)
 			style_out << "\e[" + std::to_string(cols) + "D";
+		return *this;
 	}
 
-	void ansistream::vpos(size_t y) {
+	ansistream & ansistream::vpos(size_t y) {
 		up(999999);
 		if (y > 0)
 			down(y);
+		return *this;
 	}
 
-	void ansistream::hpos(size_t x) {
+	ansistream & ansistream::hpos(size_t x) {
 		style_out << "\e[" + std::to_string(x + 1) + "H";
+		return *this;
 	}
 
-	void ansistream::scroll_up(size_t lines) {
+	ansistream & ansistream::scroll_up(size_t lines) {
 		style_out << "\e[" + std::to_string(lines) + "S";
+		return *this;
 	}
 
-	void ansistream::scroll_down(size_t lines) {
+	ansistream & ansistream::scroll_down(size_t lines) {
 		style_out << "\e[" + std::to_string(lines) + "T";
+		return *this;
 	}
 
-	void ansistream::delete_chars(size_t count) { // DCH
+	ansistream & ansistream::delete_chars(size_t count) { // DCH
 		style_out << "\e[" + std::to_string(count) + "P";
+		return *this;
 	}
 
 	ansistream & ansistream::operator<<(const ansi::color &c) {
