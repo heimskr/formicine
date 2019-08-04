@@ -10,14 +10,14 @@ namespace ansi {
 	ansistream out = {std::cout, std::cerr};
 
 	color_pair fg(ansi::color color) {
-		return {color, color_type::text};
+		return {color, color_type::foreground};
 	}
 
 	color_pair bg(ansi::color color) {
 		return {color, color_type::background};
 	}
 
-	string get_text(const ansi::color &color) {
+	string get_fg(const ansi::color &color) {
 		return "\e[3" + color_bases.at(color) + "m";
 	}
 
@@ -68,7 +68,7 @@ namespace ansi {
 	}
 
 	string color_pair::left() const {
-		return type == color_type::background? get_bg(color) : get_text(color);
+		return type == color_type::background? get_bg(color) : get_fg(color);
 	}
 
 	string color_pair::right() const {
@@ -266,8 +266,8 @@ namespace ansi {
 
 	ansistream & ansistream::operator<<(const ansi::color &c) {
 		// Adds a text color: "as << red"
-		text_color = c;
-		style_out << get_text(c);
+		fg_color = c;
+		style_out << get_fg(c);
 		return *this;
 	}
 
@@ -279,7 +279,7 @@ namespace ansi {
 		if (p.type == color_type::background)
 			style_out << get_bg(bg_color = p.color);
 		else
-			style_out << get_text(text_color = p.color);
+			style_out << get_fg(fg_color = p.color);
 
 		return *this;
 	}

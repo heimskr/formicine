@@ -12,7 +12,7 @@ namespace ansi {
 	};
 
 	enum class style {bold, dim, italic, underline};
-	enum class color_type {text, background};
+	enum class color_type {background, foreground};
 	enum class action: int {reset, end_line, check, nope, warning, information, open_paren, close_paren, enable_parens};
 
 	template <typename T>
@@ -27,7 +27,7 @@ namespace ansi {
 		ansi::color_type type;
 
 		color_pair(ansi::color color, ansi::color_type type): color(color), type(type) {}
-		color_pair(ansi::color color): color(color), type(color_type::text) {}
+		color_pair(ansi::color color): color(color), type(color_type::foreground) {}
 
 		std::string left() const;
 		std::string right() const;
@@ -35,7 +35,7 @@ namespace ansi {
 
 	class ansistream {
 		private:
-			ansi::color text_color;
+			ansi::color fg_color;
 			ansi::color bg_color;
 			std::unordered_set<ansi::style> styles;
 			bool parens_on = false;
@@ -143,7 +143,7 @@ namespace ansi {
 	static action cparen = action::close_paren;
 	static action parens = action::enable_parens;
 
-	std::string get_text(const ansi::color &);
+	std::string get_fg(const ansi::color &);
 	std::string get_bg(const ansi::color &);
 	color_pair fg(ansi::color color);
 	color_pair bg(ansi::color color);
