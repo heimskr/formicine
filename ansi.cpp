@@ -115,7 +115,18 @@ namespace ansi {
 	}
 
 	ansistream & ansistream::jump(int x, int y) {
-		style_out << "\e[" << (y + 1) << ";" << (x + 1) << "H";
+		if (0 <= x && 0 <= y) {
+			style_out << "\e[" << (y + 1) << ";" << (x + 1) << "H";
+		} else if (0 <= x) {
+			style_out << "\e[" << (x + 1) << "G";
+		} else if (0 <= y) {
+			style_out << "\e[999999A";
+			if (0 < y)
+				style_out << "\e[" + std::to_string(y) + "B";
+		} else {
+			throw std::runtime_error("Invalid jump: (" + std::to_string(x) + ", " + std::to_string(y) + ")");
+		}
+
 		return *this;
 	}
 
@@ -199,6 +210,59 @@ namespace ansi {
 		style_out << "\e[" + std::to_string(count) + "P";
 		return *this;
 	}
+
+	ansistream & ansistream::set_origin() {
+		style_out << "\e[?6h";
+		return *this;
+	}
+
+	ansistream & ansistream::reset_origin() {
+		style_out << "\e[?6l";
+		return *this;
+	}
+
+	ansistream & ansistream::hmargins(size_t left, size_t right) {
+		style_out << "\e[" + std::to_string(left + 1) + ";" + std::to_string(right + 1) + "s";
+		return *this;
+	}
+
+	ansistream & ansistream::hmargins() {
+		style_out << "\e[s";
+		return *this;
+	}
+
+	ansistream & ansistream::enable_hmargins() {
+		style_out << "\e[?69h";
+		return *this;
+	}
+
+	ansistream & ansistream::disable_hmargins() {
+		style_out << "\e[?69l";
+		return *this;
+	}
+
+	ansistream & ansistream::vmargins(size_t top, size_t bottom) {
+		style_out << "\e[" + std::to_string(top + 1) + ";" + std::to_string(bottom + 1) + "r";
+		return *this;
+	}
+
+	ansistream & ansistream::vmargins() {
+		style_out << "\e[r";
+		return *this;
+	}
+
+	ansistream & ansistream::margins(size_t top, size_t bottom, size_t left, size_t right) {
+		vmargins(top, bottom);
+		hmargins(left, right);
+		return *this;
+	}
+
+	ansistream & ansistream::margins() {
+		hmargins();
+		vmargins();
+		return *this;
+	}
+
 
 	ansistream & ansistream::operator<<(const ansi::color &c) {
 		// Adds a text color: "as << red"

@@ -88,6 +88,28 @@ namespace ansi {
 
 			/** Deletes a number of characters starting at the cursor. */
 			ansistream & delete_chars(size_t = 1);
+			
+			/** Enables origin mode: the home position is set to the top-left corner of the margins. */
+			ansistream & set_origin();
+			/** Disables origin mode. */
+			ansistream & reset_origin();
+
+			/** Sets the horizontal margins of the scrollable area. Zero-based. */
+			ansistream & hmargins(size_t left, size_t right);
+			/** Resets the horizontal margins of the scrollable area. */
+			ansistream & hmargins();
+			/** Enables horizontal margins. This must be called before calling hmargins. */
+			ansistream & enable_hmargins();
+			/** Disables horizontal margins. */
+			ansistream & disable_hmargins();
+			/** Sets the vertical margins of the scrollable area. Zero-based. */
+			ansistream & vmargins(size_t top, size_t bottom);
+			/** Resets the vertical margins of the scrollable area. */
+			ansistream & vmargins();
+			/** Sets the vertical and horizontal margins of the scrollable area. Zero-based. */
+			ansistream & margins(size_t top, size_t bottom, size_t left, size_t right);
+			/** Resets the vertical and horizontal margins of the scrollable area. */
+			ansistream & margins();
 
 			ansistream & operator<<(const ansi::color &);
 			ansistream & operator<<(const ansi::color_pair &);
