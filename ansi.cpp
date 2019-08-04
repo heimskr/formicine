@@ -77,10 +77,9 @@ namespace ansi {
 
 	ansistream::ansistream(): content_out(std::cout), style_out(std::cerr) {}
 
-	ansistream & ansistream::err() {
-		static ansistream as(std::cerr, std::cerr);
-		return as;
-	}
+
+// Private instance methods
+
 
 	ansistream & ansistream::left_paren() {
 		if (parens_on) {
@@ -102,6 +101,19 @@ namespace ansi {
 
 		return *this;
 	}
+
+
+// Public static methods
+
+
+	ansistream & ansistream::err() {
+		static ansistream as(std::cerr, std::cerr);
+		return as;
+	}
+
+
+// Public instance methods
+
 
 	ansistream & ansistream::flush() {
 		content_out.flush();
@@ -262,6 +274,14 @@ namespace ansi {
 		vmargins();
 		return *this;
 	}
+
+	ansistream & ansistream::reset_colors() {
+		style_out << "\e[39;49m";
+		return *this;
+	}
+
+
+// Public operators
 
 
 	ansistream & ansistream::operator<<(const ansi::color &c) {

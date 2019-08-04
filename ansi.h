@@ -111,6 +111,9 @@ namespace ansi {
 			/** Resets the vertical and horizontal margins of the scrollable area. */
 			ansistream & margins();
 
+			/** Restores the foreground and background colors to the terminal's default colors. */
+			ansistream & reset_colors();
+
 			ansistream & operator<<(const ansi::color &);
 			ansistream & operator<<(const ansi::color_pair &);
 			ansistream & operator<<(const ansi::style &);
