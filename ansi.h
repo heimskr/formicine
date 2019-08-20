@@ -35,8 +35,8 @@ namespace ansi {
 
 	class ansistream {
 		private:
-			ansi::color fg_color;
-			ansi::color bg_color;
+			ansi::color fg_color = ansi::color::normal;
+			ansi::color bg_color = ansi::color::normal;
 			std::unordered_set<ansi::style> styles;
 			bool parens_on = false;
 			ansistream & left_paren();
@@ -49,6 +49,13 @@ namespace ansi {
 			ansistream();
 			ansistream(std::ostream &stream): content_out(stream), style_out(stream) {}
 			ansistream(std::ostream &c, std::ostream &s): content_out(c), style_out(s) {}
+
+			ansistream(const ansistream &) = delete;
+			ansistream(ansistream &&) = delete;
+
+			ansistream & operator=(const ansistream &&) = delete;
+			ansistream & operator=(ansistream &) = delete;
+
 			static ansistream & err();
 			ansistream & flush();
 			ansistream & clear();
