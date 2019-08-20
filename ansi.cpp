@@ -79,7 +79,7 @@ namespace ansi {
 		return type == color_type::background? reset_bg : reset_fg;
 	}
 
-	ansistream::ansistream(): styles({}), content_out(std::cout), style_out(std::cerr) {}
+	ansistream::ansistream(): content_out(std::cout), style_out(std::cerr) {}
 
 
 // Private instance methods
