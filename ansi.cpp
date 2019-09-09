@@ -258,7 +258,9 @@ namespace ansi {
 	}
 
 	ansistream & ansistream::vmargins(size_t top, size_t bottom) {
-		style_out << "\e[" + std::to_string(top + 1) + ";" + std::to_string(bottom + 1) + "r";
+		const std::string top_str = top == -1? "" : std::to_string(top + 1);
+		const std::string bottom_str = bottom == -1? "" : std::to_string(bottom + 1);
+		style_out << "\e[" + top_str + ";" + bottom_str + "r";
 		return *this;
 	}
 
