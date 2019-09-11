@@ -176,53 +176,53 @@ namespace ansi {
 		return *this;
 	}
 
-	ansistream & ansistream::up(size_t rows) {
+	ansistream & ansistream::up(int rows) {
 		if (rows != 0)
 			style_out << "\e[" + std::to_string(rows) + "A";
 		return *this;
 	}
 
-	ansistream & ansistream::down(size_t rows) {
+	ansistream & ansistream::down(int rows) {
 		if (rows != 0)
 			style_out << "\e[" + std::to_string(rows) + "B";
 		return *this;
 	}
 
-	ansistream & ansistream::right(size_t cols) {
+	ansistream & ansistream::right(int cols) {
 		if (cols != 0)
 			style_out << "\e[" + std::to_string(cols) + "C";
 		return *this;
 	}
 
-	ansistream & ansistream::left(size_t cols) {
+	ansistream & ansistream::left(int cols) {
 		if (cols != 0)
 			style_out << "\e[" + std::to_string(cols) + "D";
 		return *this;
 	}
 
-	ansistream & ansistream::vpos(size_t y) {
+	ansistream & ansistream::vpos(int y) {
 		up(999999);
 		if (y > 0)
 			down(y);
 		return *this;
 	}
 
-	ansistream & ansistream::hpos(size_t x) {
+	ansistream & ansistream::hpos(int x) {
 		style_out << "\e[" + std::to_string(x + 1) + "H";
 		return *this;
 	}
 
-	ansistream & ansistream::scroll_up(size_t lines) {
+	ansistream & ansistream::scroll_up(int lines) {
 		style_out << "\e[" + std::to_string(lines) + "S";
 		return *this;
 	}
 
-	ansistream & ansistream::scroll_down(size_t lines) {
+	ansistream & ansistream::scroll_down(int lines) {
 		style_out << "\e[" + std::to_string(lines) + "T";
 		return *this;
 	}
 
-	ansistream & ansistream::delete_chars(size_t count) { // DCH
+	ansistream & ansistream::delete_chars(int count) { // DCH
 		style_out << "\e[" + std::to_string(count) + "P";
 		return *this;
 	}
@@ -237,7 +237,7 @@ namespace ansi {
 		return *this;
 	}
 
-	ansistream & ansistream::hmargins(size_t left, size_t right) {
+	ansistream & ansistream::hmargins(int left, int right) {
 		style_out << "\e[" + std::to_string(left + 1) + ";" + std::to_string(right + 1) + "s";
 		return *this;
 	}
@@ -257,7 +257,7 @@ namespace ansi {
 		return *this;
 	}
 
-	ansistream & ansistream::vmargins(size_t top, size_t bottom) {
+	ansistream & ansistream::vmargins(int top, int bottom) {
 		const std::string top_str = top == -1? "" : std::to_string(top + 1);
 		const std::string bottom_str = bottom == -1? "" : std::to_string(bottom + 1);
 		style_out << "\e[" + top_str + ";" + bottom_str + "r";
@@ -269,7 +269,7 @@ namespace ansi {
 		return *this;
 	}
 
-	ansistream & ansistream::margins(size_t top, size_t bottom, size_t left, size_t right) {
+	ansistream & ansistream::margins(int top, int bottom, int left, int right) {
 		vmargins(top, bottom);
 		hmargins(left, right);
 		return *this;

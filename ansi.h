@@ -78,23 +78,23 @@ namespace ansi {
 			ansistream & clear_right();
 
 			/* These functions move the cursor in one direction by a given offset. */ /**/
-			ansistream & up(size_t = 1);
-			ansistream & down(size_t = 1);
-			ansistream & right(size_t = 1);
-			ansistream & left(size_t = 1);
+			ansistream & up(int = 1);
+			ansistream & down(int = 1);
+			ansistream & right(int = 1);
+			ansistream & left(int = 1);
 
 			/** Sets the absolute vertical position of the cursor. Zero-based. */
-			ansistream & vpos(size_t);
+			ansistream & vpos(int);
 			/** Sets the absolute horizontal position of the cursor. Zero-based. */
-			ansistream & hpos(size_t);
+			ansistream & hpos(int);
 
 			/** Scrolls up by a number of lines. Lines at the bottom are replaced with blank lines. */
-			ansistream & scroll_up(size_t);
+			ansistream & scroll_up(int);
 			/** Scrolls down by a number of lines. Lines at the top are replaced with blank lines. */
-			ansistream & scroll_down(size_t);
+			ansistream & scroll_down(int);
 
 			/** Deletes a number of characters starting at the cursor. */
-			ansistream & delete_chars(size_t = 1);
+			ansistream & delete_chars(int = 1);
 			
 			/** Enables origin mode: the home position is set to the top-left corner of the margins. */
 			ansistream & set_origin();
@@ -102,7 +102,7 @@ namespace ansi {
 			ansistream & reset_origin();
 
 			/** Sets the horizontal margins of the scrollable area. Zero-based. */
-			ansistream & hmargins(size_t left, size_t right);
+			ansistream & hmargins(int left, int right);
 			/** Resets the horizontal margins of the scrollable area. */
 			ansistream & hmargins();
 			/** Enables horizontal margins. This must be called before calling hmargins. */
@@ -110,11 +110,11 @@ namespace ansi {
 			/** Disables horizontal margins. */
 			ansistream & disable_hmargins();
 			/** Sets the vertical margins of the scrollable area. Zero-based. */
-			ansistream & vmargins(size_t top, size_t bottom);
+			ansistream & vmargins(int top, int bottom);
 			/** Resets the vertical margins of the scrollable area. */
 			ansistream & vmargins();
 			/** Sets the vertical and horizontal margins of the scrollable area. Zero-based. */
-			ansistream & margins(size_t top, size_t bottom, size_t left, size_t right);
+			ansistream & margins(int top, int bottom, int left, int right);
 			/** Resets the vertical and horizontal margins of the scrollable area. */
 			ansistream & margins();
 
