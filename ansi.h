@@ -181,6 +181,9 @@ namespace ansi {
 	/** Boldens a string by wrapping it with the enable-bold and disable-bold escapes. */
 	std::string bold(const std::string &);
 
+	/** Dims a string by wrapping it with the enable-dim and disable-dim escapes. */
+	std::string dim(const std::string &);
+
 	const std::string reset_all = "\e[0m";
 	const std::string reset_fg  = "\e[39m";
 	const std::string reset_bg  = "\e[49m";
