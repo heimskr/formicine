@@ -7,7 +7,9 @@
 using std::string;
 
 namespace ansi {
-	ansistream out = {std::cout, std::cerr};
+	std::ofstream dbgout(".log", std::ofstream::app);
+	ansistream dbgstream(dbgout, dbgout);
+	ansistream out(std::cout, std::cerr);
 
 	color_pair fg(ansi::color color) {
 		return {color, color_type::foreground};

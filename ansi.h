@@ -1,10 +1,20 @@
 #ifndef ANSI_H_
 #define ANSI_H_
 
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <string>
 #include <unordered_set>
+
+#ifdef NODEBUG
+#define DBGX(x)
+#define DBG(x)
+#else
+#define DBGX(x) "\e[2m[" << std::right << std::setw(25) << std::setfill(' ') << std::string(__FILE__).substr(0, 25) << \
+	":" << std::setw(3) << __LINE__ << "]\e[0m " << x << std::endl
+#define DBG(x) ansi::dbgstream << DBGX(x) << ansi::action::reset
+#endif
 
 namespace ansi {
 	enum class color: int {
@@ -227,6 +237,9 @@ namespace ansi {
 		{style::italic,    "\e[23m"},
 		{style::underline, "\e[24m"},
 	};
+
+	extern std::ofstream dbgout;
+	extern ansistream dbgstream;
 }
 
 std::string operator"" _b(const char *str, unsigned long);
