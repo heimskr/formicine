@@ -178,6 +178,9 @@ namespace ansi {
 	/** Strips the ANSI escape sequences from a string. */
 	std::string strip(const std::string &);
 
+	/** Boldens a string by wrapping it with the enable-bold and disable-bold escapes. */
+	std::string bold(const std::string &);
+
 	const std::string reset_all = "\e[0m";
 	const std::string reset_fg  = "\e[39m";
 	const std::string reset_bg  = "\e[49m";

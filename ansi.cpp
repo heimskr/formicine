@@ -73,6 +73,10 @@ namespace ansi {
 		return out;
 	}
 
+	std::string bold(const std::string &str) {
+		return wrap(str, style::bold);
+	}
+
 	string color_pair::left() const {
 		return type == color_type::background? get_bg(color) : get_fg(color);
 	}
