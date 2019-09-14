@@ -184,6 +184,24 @@ namespace ansi {
 	/** Dims a string by wrapping it with the enable-dim and disable-dim escapes. */
 	std::string dim(const std::string &);
 
+#define MKCOLOR(x) std::string x(const std::string &);
+	MKCOLOR(red)
+	MKCOLOR(orange)
+	MKCOLOR(yellow)
+	MKCOLOR(yeen)
+	MKCOLOR(green)
+	MKCOLOR(blue)
+	MKCOLOR(cyan)
+	MKCOLOR(magenta)
+	MKCOLOR(purple)
+	MKCOLOR(black)
+	MKCOLOR(gray)
+	MKCOLOR(lightgray)
+	MKCOLOR(white)
+	MKCOLOR(pink)
+	MKCOLOR(sky)
+#undef MKCOLOR
+
 	const std::string reset_all = "\e[0m";
 	const std::string reset_fg  = "\e[39m";
 	const std::string reset_bg  = "\e[49m";

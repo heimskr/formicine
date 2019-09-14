@@ -81,6 +81,24 @@ namespace ansi {
 		return wrap(str, style::dim);
 	}
 
+#define MKCOLOR(x) std::string ansi::x(const std::string &str) { return ansi::wrap(str, ansi::color::x); }
+	MKCOLOR(red)
+	MKCOLOR(orange)
+	MKCOLOR(yellow)
+	MKCOLOR(yeen)
+	MKCOLOR(green)
+	MKCOLOR(blue)
+	MKCOLOR(cyan)
+	MKCOLOR(magenta)
+	MKCOLOR(purple)
+	MKCOLOR(black)
+	MKCOLOR(gray)
+	MKCOLOR(lightgray)
+	MKCOLOR(white)
+	MKCOLOR(pink)
+	MKCOLOR(sky)
+#undef MKCOLOR
+
 	string color_pair::left() const {
 		return type == color_type::background? get_bg(color) : get_fg(color);
 	}
