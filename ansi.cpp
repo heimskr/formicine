@@ -67,7 +67,14 @@ namespace ansi {
 				continue;
 			}
 
-			for (; str[i] < 0x40 || 0x7e < str[i]; ++i);
+			if (i == len - 2) {
+				// If there's only this \x1b character and the next, there's nothing left to do.
+				break;
+			}
+
+			if (str[i + 1] == '[') {
+				for (i += 2; str[i] < 0x40 || 0x7e < str[i]; ++i);
+			}
 		}
 
 		return out;
