@@ -81,7 +81,7 @@ namespace ansi {
 		return wrap(str, style::dim);
 	}
 
-#define MKCOLOR(x) std::string ansi::x(const std::string &str) { return ansi::wrap(str, ansi::color::x); }
+#define MKCOLOR(x) std::string x(const std::string &str) { return wrap(str, color::x); }
 	MKCOLOR(red)
 	MKCOLOR(orange)
 	MKCOLOR(yellow)
