@@ -147,6 +147,7 @@ namespace ansi {
 	MKCOLOR(white)
 	MKCOLOR(pink)
 	MKCOLOR(sky)
+	MKCOLOR(verydark)
 #undef MKCOLOR
 
 	string color_pair::left() const {
