@@ -179,7 +179,7 @@ namespace ansi {
 	std::string strip(const std::string &);
 
 	/** Finds a substring without ANSI escapes affecting the character count. */
-	std::string substr(const std::string &, size_t, size_t = 0);
+	std::string substr(const std::string &, size_t, size_t = std::string::npos);
 
 	/** Returns the length of a string without counting ANSI escapes. */
 	size_t length(const std::string &);
