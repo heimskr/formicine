@@ -190,6 +190,12 @@ namespace ansi {
 	/** Dims a string by wrapping it with the enable-dim and disable-dim escapes. */
 	std::string dim(const std::string &);
 
+	/** Erases part of a string. */
+	std::string & erase(std::string &, size_t pos = 0, size_t len = std::string::npos);
+
+	/** Adjusts an index in a string to account for ANSI escapes. */
+	size_t get_pos(const std::string &, size_t);
+
 #define MKCOLOR(x) std::string x(const std::string &);
 	MKCOLOR(red)
 	MKCOLOR(orange)

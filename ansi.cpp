@@ -67,50 +67,20 @@ namespace ansi {
 				continue;
 			}
 
-			if (i == len - 2) {
-				// If there's only this \x1b character and the next, there's nothing left to do.
-				break;
-			}
-
-			if (str[i + 1] == '[') {
+			// If there's only this \x1b character and the next, there's nothing left to do.
+			if (i == len - 2) break;
+			if (str[i + 1] == '[')
 				for (i += 2; str[i] < 0x40 || 0x7e < str[i]; ++i);
-			}
 		}
 
 		return out;
 	}
 
 	std::string substr(const std::string &str, size_t pos, size_t n) {
-		if (pos == 0 && n == 0)
-			return "";
-		if (pos == 0 && n == std::string::npos)
-			return str;
-
-		
-		size_t counted, i = 0, length = str.length();
-		size_t start, include;
-		size_t limits[] = {pos, n};
-
-		for (int stage = 0; stage < 2; ++stage) {
-			size_t limit = limits[stage];
-			for (counted = 0; i < length && counted < limit; ++i) {
-				if (str[i] != '\x1b') {
-					++counted;
-				} else {
-					if (i == length - 2)
-						break;
-					if (str[i + 1] == '[') {
-						for (i += 2; str[i] < 0x40 || 0x7e < str[i]; ++i);
-					}
-				}
-			}
-
-			if (stage == 0)
-				start = i;
-		}
-
-		include = i - start;
-		return str.substr(start, include);
+		const size_t start = get_pos(str, pos);
+		if (n == std::string::npos)
+			return str.substr(start);
+		return str.substr(start, get_pos(str, pos + n) - start);
 	}
 
 	size_t length(const std::string &str) {
@@ -119,15 +89,38 @@ namespace ansi {
 			if (str[i] != '\x1b') {
 				++counted;
 			} else {
-				if (i == length - 2)
-					break;
-				if (str[i + 1] == '[') {
+				if (i == length - 2) break;
+				if (str[i + 1] == '[')
 					for (i += 2; str[i] < 0x40 || 0x7e < str[i]; ++i);
-				}
 			}
 		}
 
 		return counted;
+	}
+
+	std::string & erase(std::string &str, size_t pos, size_t len) {
+		const size_t start = get_pos(str, len);
+		if (len == std::string::npos)
+			return str.erase(start);
+		return str.erase(start, get_pos(str, pos + len) - start);
+	}
+
+	size_t get_pos(const std::string &str, size_t old_pos) {
+		if (old_pos == std::string::npos)
+			return old_pos;
+		const size_t length = str.length();
+		size_t i, counted = 0;
+		for (i = 0; i < length && counted != old_pos; ++i) {
+			if (str[i] != '\x1b') {
+				++counted;
+			} else {
+				if (i == length - 2) break;
+				if (str[i + 1] == '[')
+					for (i += 2; str[i] < 0x40 || 0x7e < str[i]; ++i);
+			}
+		}
+
+		return i;
 	}
 
 	std::string bold(const std::string &str) {
