@@ -99,7 +99,7 @@ namespace ansi {
 	}
 
 	std::string & erase(std::string &str, size_t pos, size_t len) {
-		const size_t start = get_pos(str, len);
+		const size_t start = get_pos(str, pos);
 		if (len == std::string::npos)
 			return str.erase(start);
 		return str.erase(start, get_pos(str, pos + len) - start);
