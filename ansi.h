@@ -16,6 +16,9 @@
 #define DBG(x) ansi::dbgstream << DBGX(x) << ansi::action::reset
 #endif
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
 namespace ansi {
 	enum class color: int {
 		normal, red, orange, yellow, yeen, green, blue, cyan, magenta, purple, black, gray, lightgray, white, pink, sky
@@ -283,5 +286,7 @@ std::string operator"" _d(const char *str, unsigned long);
 std::string operator"" _i(const char *str, unsigned long);
 std::string operator"" _u(const char *str, unsigned long);
 std::string operator"" _bd(const char *str, unsigned long);
+
+#pragma GCC diagnostic pop
 
 #endif
