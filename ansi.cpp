@@ -113,6 +113,23 @@ namespace ansi {
 		return str.substr(start, include);
 	}
 
+	size_t length(const std::string &str) {
+		size_t i = 0, length = str.length(), counted = 0;
+		for (; i < length; ++i) {
+			if (str[i] != '\x1b') {
+				++counted;
+			} else {
+				if (i == length - 2)
+					break;
+				if (str[i + 1] == '[') {
+					for (i += 2; str[i] < 0x40 || 0x7e < str[i]; ++i);
+				}
+			}
+		}
+
+		return counted;
+	}
+
 	std::string bold(const std::string &str) {
 		return wrap(str, style::bold);
 	}

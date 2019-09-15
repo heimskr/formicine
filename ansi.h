@@ -181,6 +181,9 @@ namespace ansi {
 	/** Finds a substring without ANSI escapes affecting the character count. */
 	std::string substr(const std::string &, size_t, size_t = 0);
 
+	/** Returns the length of a string without counting ANSI escapes. */
+	size_t length(const std::string &);
+
 	/** Boldens a string by wrapping it with the enable-bold and disable-bold escapes. */
 	std::string bold(const std::string &);
 
