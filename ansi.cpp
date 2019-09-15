@@ -80,6 +80,39 @@ namespace ansi {
 		return out;
 	}
 
+	std::string substr(const std::string &str, size_t pos, size_t n) {
+		if (pos == 0 && n == 0)
+			return "";
+		if (pos == 0 && n == std::string::npos)
+			return str;
+
+		
+		size_t counted, i = 0, length = str.length();
+		size_t start, include;
+		size_t limits[] = {pos, n};
+
+		for (int stage = 0; stage < 2; ++stage) {
+			size_t limit = limits[stage];
+			for (counted = 0; i < length && counted < limit; ++i) {
+				if (str[i] != '\x1b') {
+					++counted;
+				} else {
+					if (i == length - 2)
+						break;
+					if (str[i + 1] == '[') {
+						for (i += 2; str[i] < 0x40 || 0x7e < str[i]; ++i);
+					}
+				}
+			}
+
+			if (stage == 0)
+				start = i;
+		}
+
+		include = i - start;
+		return str.substr(start, include);
+	}
+
 	std::string bold(const std::string &str) {
 		return wrap(str, style::bold);
 	}
