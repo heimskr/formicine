@@ -120,6 +120,14 @@ namespace ansi {
 			}
 		}
 
+		// Deals with cases where the returned index would be right before an ANSI escape, such as pos=0 with a string
+		// that starts with an ANSI escape.
+		if (i < length - 2 && str[i] == '\x1b') {
+			if (str[i + 1] == '[')
+				for (i += 2; str[i] < 0x40 || 0x7e < str[i]; ++i);
+			return i + 1;
+		}
+
 		return i;
 	}
 
