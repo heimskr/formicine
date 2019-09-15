@@ -1,7 +1,12 @@
-COMPILER		= clang++
-CC				= $(COMPILER) -std=c++17 -g -O3 -Wall -Wextra
-OBJECTS			= ansi.o
-TESTOUTPUT		= ansi
+COMPILER		:= clang++
+CC				:= $(COMPILER) -std=c++17 -g -O3 -Wall -Wextra
+OBJECTS			:= ansi.o
+TESTOUTPUT		:= ansi
+
+
+ifeq ($(shell uname -s), Darwin)
+	CC	+= --sysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+endif
 
 all: $(TESTOUTPUT)
 

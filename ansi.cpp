@@ -255,6 +255,21 @@ namespace ansi {
 		return *this;
 	}
 
+	ansistream & ansistream::clear_rect(int top, int bottom, int left, int right) { // DECSERA
+		// DECSERA isn't affected by margins (thankfully), but it's affected by the origin setting (DECOM), so we need
+		// to disable it temporarily if it's currently set.
+		bool origin_was_on = origin_on;
+		if (origin_was_on)
+			reset_origin();
+
+		style_out << "\e[" << std::to_string(top + 1) << ";" << std::to_string(left + 1) << ";"
+		          << std::to_string(bottom + 1) << ";" << std::to_string(right + 1) << "${"; // That's a strange ending.
+
+		if (origin_was_on)
+			set_origin();
+		return *this;
+	}
+
 	ansistream & ansistream::up(int rows) {
 		if (rows != 0)
 			style_out << "\e[" + std::to_string(rows) + "A";
@@ -308,11 +323,13 @@ namespace ansi {
 
 	ansistream & ansistream::set_origin() {
 		style_out << "\e[?6h";
+		origin_on = true;
 		return *this;
 	}
 
 	ansistream & ansistream::reset_origin() {
 		style_out << "\e[?6l";
+		origin_on = false;
 		return *this;
 	}
 
