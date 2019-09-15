@@ -2,6 +2,7 @@
 #define ANSI_H_
 
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <string>
