@@ -93,9 +93,6 @@ namespace ansi {
 			/** Clears all text to the right of the cursor. */
 			ansistream & clear_right();
 
-			/** Clears a rectangular region of the screen (DECSERA). */
-			ansistream & clear_rect(int top, int bottom, int left, int right);
-
 			/* These functions move the cursor in one direction by a given offset. */ /**/
 			ansistream & up(int = 1);
 			ansistream & down(int = 1);
