@@ -58,6 +58,8 @@ namespace ansi {
 			ansistream & left_paren();
 			ansistream & right_paren();
 
+			ansistream & move(int, char);
+
 		public:
 			std::ostream &content_out;
 			std::ostream &style_out;
@@ -92,6 +94,11 @@ namespace ansi {
 			ansistream & clear_left();
 			/** Clears all text to the right of the cursor. */
 			ansistream & clear_right();
+
+			/** Makes the cursor visible. */
+			ansistream & show();
+			/** Makes the cursor invisible. */
+			ansistream & hide();
 
 			/* These functions move the cursor in one direction by a given offset. */ /**/
 			ansistream & up(int = 1);

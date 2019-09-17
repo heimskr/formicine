@@ -3,9 +3,14 @@ CC				:= $(COMPILER) -std=c++17 -g -O3 -Wall -Wextra
 OBJECTS			:= ansi.o
 TESTOUTPUT		:= ansi
 
-
 ifeq ($(shell uname -s), Darwin)
-	CC	+= --sysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+	SDKFLAGS	:= --sysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+endif
+
+ifeq ($(CHECK), asan)
+	CHECKFLAGS := -fsanitize=address -fno-common
+else ifeq ($(CHECK), msan)
+	CHECKFLAGS := -fsanitize=memory -fno-common
 endif
 
 all: $(TESTOUTPUT)

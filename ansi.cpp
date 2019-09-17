@@ -11,21 +11,11 @@ namespace ansi {
 	ansistream dbgstream(dbgout, dbgout);
 	ansistream out(std::cout, std::cerr);
 
-	color_pair fg(ansi::color color) {
-		return {color, color_type::foreground};
-	}
+	color_pair fg(ansi::color color) { return {color, color_type::foreground}; }
+	color_pair bg(ansi::color color) { return {color, color_type::background}; }
 
-	color_pair bg(ansi::color color) {
-		return {color, color_type::background};
-	}
-
-	string get_fg(ansi::color color) {
-		return "\e[3" + color_bases.at(color) + "m";
-	}
-
-	string get_bg(ansi::color color) {
-		return "\e[4" + color_bases.at(color) + "m";
-	}
+	string get_fg(ansi::color color) { return "\e[3" + color_bases.at(color) + "m"; }
+	string get_bg(ansi::color color) { return "\e[4" + color_bases.at(color) + "m"; }
 
 	ansi_pair<style> remove(ansi::style style) {
 		return {style, false};
@@ -225,59 +215,25 @@ namespace ansi {
 		return *this;
 	}
 
-	ansistream & ansistream::jump() {
-		jump(0, 0);
+	ansistream & ansistream::jump()        { jump(0, 0);             return *this; }
+	ansistream & ansistream::save()        { style_out << "\e[s";    return *this; }
+	ansistream & ansistream::restore()     { style_out << "\e[u";    return *this; }
+	ansistream & ansistream::clear_line()  { style_out << "\e[2K";   return *this; }
+	ansistream & ansistream::clear_left()  { style_out << "\e[1K";   return *this; }
+	ansistream & ansistream::clear_right() { style_out << "\e[K";    return *this; }
+	ansistream & ansistream::show()        { style_out << "\e[?25h"; return *this; }
+	ansistream & ansistream::hide()        { style_out << "\e[?25l"; return *this; }
+
+	ansistream & ansistream::move(int n, char c) {
+		if (n != 0)
+			style_out << "\e[" << std::to_string(n) << c;
 		return *this;
 	}
 
-	ansistream & ansistream::save() {
-		style_out << "\e[s";
-		return *this;
-	}
-
-	ansistream & ansistream::restore() {
-		style_out << "\e[u";
-		return *this;
-	}
-
-	ansistream & ansistream::clear_line() {
-		style_out << "\e[2K";
-		return *this;
-	}
-
-	ansistream & ansistream::clear_left() {
-		style_out << "\e[1K";
-		return *this;
-	}
-
-	ansistream & ansistream::clear_right() {
-		style_out << "\e[K";
-		return *this;
-	}
-
-	ansistream & ansistream::up(int rows) {
-		if (rows != 0)
-			style_out << "\e[" + std::to_string(rows) + "A";
-		return *this;
-	}
-
-	ansistream & ansistream::down(int rows) {
-		if (rows != 0)
-			style_out << "\e[" + std::to_string(rows) + "B";
-		return *this;
-	}
-
-	ansistream & ansistream::right(int cols) {
-		if (cols != 0)
-			style_out << "\e[" + std::to_string(cols) + "C";
-		return *this;
-	}
-
-	ansistream & ansistream::left(int cols) {
-		if (cols != 0)
-			style_out << "\e[" + std::to_string(cols) + "D";
-		return *this;
-	}
+	ansistream & ansistream::up(int rows)    { return move(rows, 'A'); }
+	ansistream & ansistream::down(int rows)  { return move(rows, 'B'); }
+	ansistream & ansistream::right(int cols) { return move(cols, 'C'); }
+	ansistream & ansistream::left(int cols)  { return move(cols, 'D'); }
 
 	ansistream & ansistream::vpos(int y) {
 		up(999999);
@@ -286,67 +242,28 @@ namespace ansi {
 		return *this;
 	}
 
-	ansistream & ansistream::hpos(int x) {
-		style_out << "\e[" + std::to_string(x + 1) + "H";
-		return *this;
-	}
+	ansistream & ansistream::hpos(int x)             { style_out << "\e[" + std::to_string(x + 1) + "H"; return *this; }
+	ansistream & ansistream::scroll_up(int lines)    { style_out << "\e[" + std::to_string(lines) + "S"; return *this; }
+	ansistream & ansistream::scroll_down(int lines)  { style_out << "\e[" + std::to_string(lines) + "T"; return *this; }
+	ansistream & ansistream::delete_chars(int count) { style_out << "\e[" + std::to_string(count) + "P"; return *this; }
 
-	ansistream & ansistream::scroll_up(int lines) {
-		style_out << "\e[" + std::to_string(lines) + "S";
-		return *this;
-	}
-
-	ansistream & ansistream::scroll_down(int lines) {
-		style_out << "\e[" + std::to_string(lines) + "T";
-		return *this;
-	}
-
-	ansistream & ansistream::delete_chars(int count) { // DCH
-		style_out << "\e[" + std::to_string(count) + "P";
-		return *this;
-	}
-
-	ansistream & ansistream::set_origin() {
-		style_out << "\e[?6h";
-		origin_on = true;
-		return *this;
-	}
-
-	ansistream & ansistream::reset_origin() {
-		style_out << "\e[?6l";
-		origin_on = false;
-		return *this;
-	}
+	ansistream & ansistream::set_origin()   { style_out << "\e[?6h"; origin_on = true;  return *this; }
+	ansistream & ansistream::reset_origin() { style_out << "\e[?6l"; origin_on = false; return *this; }
 
 	ansistream & ansistream::hmargins(int left, int right) {
 		style_out << "\e[" + std::to_string(left + 1) + ";" + std::to_string(right + 1) + "s";
 		return *this;
 	}
 
-	ansistream & ansistream::hmargins() {
-		style_out << "\e[s";
-		return *this;
-	}
-
-	ansistream & ansistream::enable_hmargins() {
-		style_out << "\e[?69h";
-		return *this;
-	}
-
-	ansistream & ansistream::disable_hmargins() {
-		style_out << "\e[?69l";
-		return *this;
-	}
+	ansistream & ansistream::hmargins()         { style_out << "\e[s";    return *this; }
+	ansistream & ansistream::enable_hmargins()  { style_out << "\e[?69h"; return *this; }
+	ansistream & ansistream::disable_hmargins() { style_out << "\e[?69l"; return *this; }
+	ansistream & ansistream::vmargins()         { style_out << "\e[r";    return *this; }
 
 	ansistream & ansistream::vmargins(int top, int bottom) {
 		const std::string top_str = top == -1? "" : std::to_string(top + 1);
 		const std::string bottom_str = bottom == -1? "" : std::to_string(bottom + 1);
 		style_out << "\e[" + top_str + ";" + bottom_str + "r";
-		return *this;
-	}
-
-	ansistream & ansistream::vmargins() {
-		style_out << "\e[r";
 		return *this;
 	}
 
@@ -362,10 +279,7 @@ namespace ansi {
 		return *this;
 	}
 
-	ansistream & ansistream::reset_colors() {
-		style_out << "\e[39;49m";
-		return *this;
-	}
+	ansistream & ansistream::reset_colors() { style_out << "\e[39;49m"; return *this; }
 
 
 // Public operators
