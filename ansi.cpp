@@ -221,8 +221,9 @@ namespace ansi {
 	ansistream & ansistream::clear_line()  { style_out << "\e[2K";   return *this; }
 	ansistream & ansistream::clear_left()  { style_out << "\e[1K";   return *this; }
 	ansistream & ansistream::clear_right() { style_out << "\e[K";    return *this; }
-	ansistream & ansistream::show()        { style_out << "\e[?25h"; return *this; }
-	ansistream & ansistream::hide()        { style_out << "\e[?25l"; return *this; }
+
+	ansistream & ansistream::show() { style_out << "\e[?25h"; hidden = false; return *this; }
+	ansistream & ansistream::hide() { style_out << "\e[?25l"; hidden = true;  return *this; }
 
 	ansistream & ansistream::move(int n, char c) {
 		if (n != 0)

@@ -55,9 +55,10 @@ namespace ansi {
 			std::unordered_set<ansi::style> styles;
 			bool parens_on = false;
 			bool origin_on = false;
+			bool hidden = false;
+
 			ansistream & left_paren();
 			ansistream & right_paren();
-
 			ansistream & move(int, char);
 
 		public:
