@@ -1,4 +1,7 @@
 .vscode
+.log
+.DS_Store
+._*
 ansi
 
 # Prerequisites
