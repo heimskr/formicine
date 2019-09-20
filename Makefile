@@ -1,5 +1,5 @@
-COMPILER		:= clang++
-CC				:= $(COMPILER) -std=c++17 -g -O3 -Wall -Wextra
+COMPILER		:= g++
+CC				:= $(COMPILER) -std=c++2a -g -O0 -Wall -Wextra
 OBJECTS			:= ansi.o
 TESTOUTPUT		:= ansi
 
@@ -19,10 +19,10 @@ test: $(TESTOUTPUT)
 	./$(TESTOUTPUT)
 
 $(TESTOUTPUT): test.o $(OBJECTS)
-	$(CC) $^ -o $@
+	$(CC) $(SDKFLAGS) $^ -o $@
 
 %.o: %.cpp
-	$(CC) -c $<
+	$(CC) $(SDKFLAGS) -c $<
 
 clean:
 	rm -f *.o $(TESTOUTPUT)

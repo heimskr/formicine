@@ -1,5 +1,5 @@
-#ifndef ANSI_H_
-#define ANSI_H_
+#ifndef FORMICINE_ANSI_H_
+#define FORMICINE_ANSI_H_
 
 #include <fstream>
 #include <iomanip>
