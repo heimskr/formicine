@@ -23,7 +23,7 @@
 namespace ansi {
 	enum class color: int {
 		normal, red, orange, yellow, yeen, green, blue, cyan, magenta, purple, black, gray, lightgray, white, pink, sky,
-		verydark
+		verydark, blood
 	};
 
 	enum class style {bold, dim, italic, underline};
@@ -227,6 +227,7 @@ namespace ansi {
 	MKCOLOR(pink)
 	MKCOLOR(sky)
 	MKCOLOR(verydark)
+	MKCOLOR(blood)
 #undef MKCOLOR
 
 	const std::string reset_all = "\e[0m";
@@ -255,6 +256,7 @@ namespace ansi {
 		{color::pink,      "pink"},
 		{color::sky,       "sky"},
 		{color::verydark,  "verydark"},
+		{color::blood,     "blood"},
 	};
 
 	const std::map<color, std::string> color_bases = {
@@ -275,6 +277,7 @@ namespace ansi {
 		{color::pink,      "8;5;219"},
 		{color::sky,       "8;5;153"},
 		{color::verydark,  "8;5;232"},
+		{color::blood,     "8;5;52"},
 	};
 
 	const std::map<style, std::string> style_codes = {
