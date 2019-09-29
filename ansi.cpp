@@ -46,6 +46,15 @@ namespace ansi {
 		return get_fg(color) + color_names.at(color) + reset_fg;
 	}
 
+	ansi::color get_color(const std::string &name) {
+		for (const auto &pair: color_names) {
+			if (pair.second == name)
+				return pair.first;
+		}
+
+		return ansi::color::normal;
+	}
+
 	std::string strip(const std::string &str) {
 		std::string out = "";
 		size_t len = str.length();
