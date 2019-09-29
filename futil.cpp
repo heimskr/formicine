@@ -1,7 +1,7 @@
 #include "futil.h"
 
 namespace formicine {
-	std::vector<std::string> util::split(const std::string &str, const std::string &delimeter) {
+	std::vector<std::string> util::split(const std::string &str, const std::string &delimeter, bool condense) {
 		if (str.empty())
 			return {};
 
@@ -18,7 +18,9 @@ namespace formicine {
 		while (next != std::string::npos) {
 			last = next;
 			next = str.find(delimeter, last + delimeter_length);
-			out.push_back(str.substr(last + delimeter_length, next - last - delimeter_length));
+			std::string sub = str.substr(last + delimeter_length, next - last - delimeter_length);
+			if (!sub.empty() || !condense)
+				out.push_back(std::move(sub));
 		}
 
 		return out;
