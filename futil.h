@@ -29,7 +29,7 @@ namespace formicine {
 			return oss.str();
 		}
 
-		template <typename Pred>
+		template <typename Pred, typename std::enable_if<std::is_invocable<Pred, char>::value>::type * = nullptr>
 		static std::string filter(const std::string &str, Pred predicate) {
 			std::string out;
 			out.reserve(str.size());
@@ -43,6 +43,9 @@ namespace formicine {
 
 		static std::string filter(const std::string &str, const std::string &allowed_chars);
 		static std::string antifilter(const std::string &str, const std::string &allowed_chars);
+
+		static std::string lower(std::string);
+		static std::string upper(std::string);
 	};
 }
 

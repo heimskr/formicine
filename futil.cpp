@@ -33,4 +33,24 @@ namespace formicine {
 	std::string util::antifilter(const std::string &str, const std::string &forbidden_chars) {
 		return filter(str, [&](char ch) { return forbidden_chars.find(ch) == std::string::npos; });
 	}
+
+	std::string util::lower(std::string str) {
+		// TODO: Unicode. Of course.
+		for (size_t i = 0, length = str.length(); i < length; ++i) {
+			if ('A' <= str[i] && str[i] <= 'Z')
+				str[i] += 'a' - 'A';
+		}
+
+		return str;
+	}
+
+	std::string util::upper(std::string str) {
+		// TODO: Unicode. Of course.
+		for (size_t i = 0, length = str.length(); i < length; ++i) {
+			if ('a' <= str[i] && str[i] <= 'z')
+				str[i] -= 'a' - 'A';
+		}
+
+		return str;
+	}
 }
