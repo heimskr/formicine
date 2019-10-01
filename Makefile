@@ -1,6 +1,6 @@
 COMPILER		:= g++
 CC				:= $(COMPILER) -std=c++2a -g -O0 -Wall -Wextra
-OBJECTS			:= ansi.o
+OBJECTS			:= ansi.o futil.o
 TESTOUTPUT		:= ansi
 
 ifeq ($(shell uname -s), Darwin)
