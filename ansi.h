@@ -26,7 +26,7 @@ namespace ansi {
 		verydark, blood, brown
 	};
 
-	enum class style {bold, dim, italic, underline};
+	enum class style {bold, dim, italic, underline, inverse};
 	enum class color_type: int {background = 1, foreground = 2, both = 3};
 	enum class action: int {reset, end_line, check, nope, warning, information, open_paren, close_paren, enable_parens};
 
@@ -288,6 +288,7 @@ namespace ansi {
 		{style::dim,       "\e[2m"},
 		{style::italic,    "\e[3m"},
 		{style::underline, "\e[4m"},
+		{style::inverse,   "\e[7m"},
 	};
 
 	const std::map<style, std::string> style_resets = {
@@ -295,6 +296,7 @@ namespace ansi {
 		{style::dim,       "\e[22m"},
 		{style::italic,    "\e[23m"},
 		{style::underline, "\e[24m"},
+		{style::inverse,   "\e[27m"},
 	};
 
 	extern std::ofstream dbgout;
