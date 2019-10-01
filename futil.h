@@ -28,6 +28,20 @@ namespace formicine {
 
 			return oss.str();
 		}
+
+		template <typename Pred>
+		static std::string filter(const std::string &str, Pred predicate) {
+			std::string out;
+			out.reserve(str.size());
+			for (char ch: str) {
+				if (predicate(ch))
+					out.push_back(ch);
+			}
+
+			return out;
+		}
+
+		static std::string filter(const std::string &str, const std::string &allowed_chars);
 	};
 }
 
