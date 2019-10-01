@@ -42,6 +42,7 @@ namespace formicine {
 		}
 
 		static std::string filter(const std::string &str, const std::string &allowed_chars);
+		static std::string antifilter(const std::string &str, const std::string &allowed_chars);
 	};
 }
 

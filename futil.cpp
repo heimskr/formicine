@@ -29,4 +29,8 @@ namespace formicine {
 	std::string util::filter(const std::string &str, const std::string &allowed_chars) {
 		return filter(str, [&](char ch) { return allowed_chars.find(ch) != std::string::npos; });
 	}
+
+	std::string util::antifilter(const std::string &str, const std::string &forbidden_chars) {
+		return filter(str, [&](char ch) { return forbidden_chars.find(ch) == std::string::npos; });
+	}
 }
