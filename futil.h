@@ -13,6 +13,9 @@ namespace formicine {
 
 		template <typename Iter>
 		static std::string join(Iter begin, Iter end, const std::string &delim = " ") {
+			if (begin == end)
+				return "";
+
 			std::ostringstream oss;
 			bool first = true;
 			while (begin != end) {
