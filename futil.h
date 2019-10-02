@@ -49,6 +49,8 @@ namespace formicine {
 
 		static std::string lower(std::string);
 		static std::string upper(std::string);
+
+		static std::string nth_word(const std::string &, size_t);
 	};
 }
 

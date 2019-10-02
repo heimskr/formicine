@@ -53,4 +53,9 @@ namespace formicine {
 
 		return str;
 	}
+
+	std::string util::nth_word(const std::string &str, size_t n) {
+		const std::vector<std::string> words = split(str, " ", true);
+		return n < words.size()? words[n] : "";
+	}
 }
