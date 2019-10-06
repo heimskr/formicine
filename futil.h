@@ -32,6 +32,11 @@ namespace formicine {
 			return oss.str();
 		}
 
+		template <typename Container>
+		static std::string join(const Container &cont, const std::string &delim = " ") {
+			return join(cont.begin(), cont.end(), delim);
+		}
+
 		template <typename Pred, typename std::enable_if<std::is_invocable<Pred, char>::value>::type * = nullptr>
 		static std::string filter(const std::string &str, Pred predicate) {
 			std::string out;
