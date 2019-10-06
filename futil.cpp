@@ -60,9 +60,12 @@ namespace formicine {
 			return n < words.size()? words[n] : "";
 		}
 
-		const size_t index = nth_index(str, ' ', n);
+		if (n == 0)
+			return str.substr(0, str.find(' '));
+
+		const size_t index = nth_index(str, ' ', n - 1);
 		if (index == std::string::npos)
 			return "";
-		return str.substr(index, nth_index(str, ' ', n + 1) - index);
+		return str.substr(index + 1, nth_index(str, ' ', n) - index - 1);
 	}
 }
