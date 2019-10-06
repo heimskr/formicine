@@ -56,13 +56,13 @@ namespace formicine {
 
 	std::string util::nth_word(const std::string &str, size_t n, bool condense) {
 		if (condense) {
-			const size_t index = nth_index(str, ' ', n);
-			if (index == std::string::npos)
-				return "";
-			return str.substr(index, nth_index(str, ' ', n + 1) - index);
+			const std::vector<std::string> words = split(str, " ", true);
+			return n < words.size()? words[n] : "";
 		}
 
-		const std::vector<std::string> words = split(str, " ", true);
-		return n < words.size()? words[n] : "";
+		const size_t index = nth_index(str, ' ', n);
+		if (index == std::string::npos)
+			return "";
+		return str.substr(index, nth_index(str, ' ', n + 1) - index);
 	}
 }
