@@ -55,7 +55,15 @@ namespace formicine {
 		static std::string lower(std::string);
 		static std::string upper(std::string);
 
-		static std::string nth_word(const std::string &, size_t);
+		template <typename T>
+		static size_t nth_index(const std::string &str, const T &to_find, int n) {
+			size_t index = 0;
+			for (int i = 0; i <= n; ++i)
+				index = str.find(to_find, i? index + 1 : i);
+			return index;
+		}
+
+		static std::string nth_word(const std::string &, size_t, bool condense = false);
 	};
 }
 
