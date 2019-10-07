@@ -84,7 +84,7 @@ namespace formicine {
 		}
 
 		for (; i < length; ++i) {
-			if (str[i] == ' ' && (i == 0 || str[i - 1] != ' '))
+			if (str[i] == ' ' && (!condense || i == 0 || str[i - 1] != ' '))
 				++count;
 		}
 
