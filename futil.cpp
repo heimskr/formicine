@@ -63,9 +63,9 @@ namespace formicine {
 		if (n == 0)
 			return str.substr(0, str.find(' '));
 
-		const size_t index = nth_index(str, ' ', n - 1);
+		const size_t index = nth_index(str, ' ', n);
 		if (index == std::string::npos)
 			return "";
-		return str.substr(index + 1, nth_index(str, ' ', n) - index - 1);
+		return str.substr(index + 1, nth_index(str, ' ', n + 1) - index - 1);
 	}
 }
