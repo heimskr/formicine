@@ -68,4 +68,31 @@ namespace formicine {
 			return "";
 		return str.substr(index + 1, nth_index(str, ' ', n + 1) - index - 1);
 	}
+
+	size_t util::word_count(const std::string &str, bool condense) {
+		size_t count = 0, i = 0, length = str.length();
+		if (length == 0)
+			return 0;
+
+		// If condense is true, count all spaces except the ones at the beginning, then count and subtract the ones at
+		// the end.
+
+		if (condense) {
+			for (; i < length && str[i] == ' '; ++i);
+			if (i == length)
+				return 0;
+		}
+
+		for (; i < length; ++i) {
+			if (str[i] == ' ' && (i == 0 || str[i - 1] != ' '))
+				++count;
+		}
+
+		if (condense) {
+			for (i = length - 1; 0 <= i && str[i] == ' '; --i)
+				--count;
+		}
+
+		return count + 1;
+	}
 }

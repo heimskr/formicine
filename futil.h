@@ -64,6 +64,7 @@ namespace formicine {
 		}
 
 		static std::string nth_word(const std::string &, size_t, bool condense = false);
+		static size_t word_count(const std::string &, bool condense = true);
 	};
 }
 
