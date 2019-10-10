@@ -30,6 +30,9 @@ namespace ansi {
 	enum class color_type: int {background = 1, foreground = 2, both = 3};
 	enum class action: int {reset, end_line, check, nope, warning, information, open_paren, close_paren, enable_parens};
 
+	/** Replaces escapes that start with '^' with ANSI escapes. */
+	std::string format(const std::string &str);
+
 	template <typename T>
 	struct ansi_pair {
 		T value;

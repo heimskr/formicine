@@ -11,6 +11,71 @@ namespace ansi {
 	ansistream dbgstream(dbgout, dbgout);
 	ansistream out(std::cout, std::cerr);
 
+	std::string format(const std::string &str) {
+		std::string out;
+		out.reserve(str.length() * 1.1);
+		const size_t length = str.length();
+		for (size_t i = 0; i < length; ++i) {
+			const char ch = str[i];
+			const size_t remaining = length - i - 1;
+			if (ch != '^' || remaining == 1) {
+				out.push_back(ch);
+				continue;
+			}
+
+			const char next = str[++i];
+
+			if (next == '^') {
+				out += ch;
+				continue;
+			} else if (next == 'b') {
+				out += style_codes.at(style::bold);
+			} else if (next == 'r') {
+				out += style_codes.at(style::dim);
+			} else if (next == 'u') {
+				out += style_codes.at(style::underline);
+			} else if (next == 'i') {
+				out += style_codes.at(style::italic);
+			} else if (next == 'B') {
+				out += style_resets.at(style::bold);
+			} else if (next == 'R') {
+				out += style_resets.at(style::dim);
+			} else if (next == 'U') {
+				out += style_resets.at(style::underline);
+			} else if (next == 'I') {
+				out += style_resets.at(style::italic);
+			} else if (next == '0') {
+				out += reset_all;
+			} else if (next == '[' && 3 <= remaining) {
+				const size_t close_pos = str.find(']', i + 2);
+				const std::string type = str.substr(i + 1, close_pos - (i + 1));
+				DBG("type{" << type << "}");
+				color col = get_color(type);
+
+				if (type == "/f") {
+					out += reset_fg;
+				} else if (type == "/b") {
+					out += reset_bg;
+				} else if (type.front() == ':') {
+					col = get_color(type.substr(1));
+					if (col == color::normal && type != "normal")
+						throw std::invalid_argument("Invalid format identifier");
+					out += get_bg(col);
+				} else if (col == color::normal && type != "normal") {
+					throw std::invalid_argument("Invalid format identifier");
+				} else {
+					out += get_fg(col);
+				}
+
+				i = close_pos;
+			} else {
+				throw std::invalid_argument("Invalid next character in format");
+			}
+		}
+
+		return out;
+	}
+
 	color_pair fg(ansi::color color) { return {color, color_type::foreground}; }
 	color_pair bg(ansi::color color) { return {color, color_type::background}; }
 
