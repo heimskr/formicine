@@ -30,7 +30,7 @@ namespace ansi {
 				continue;
 			} else if (next == 'b') {
 				out += style_codes.at(style::bold);
-			} else if (next == 'r') {
+			} else if (next == 'd') {
 				out += style_codes.at(style::dim);
 			} else if (next == 'u') {
 				out += style_codes.at(style::underline);
@@ -38,7 +38,7 @@ namespace ansi {
 				out += style_codes.at(style::italic);
 			} else if (next == 'B') {
 				out += style_resets.at(style::bold);
-			} else if (next == 'R') {
+			} else if (next == 'D') {
 				out += style_resets.at(style::dim);
 			} else if (next == 'U') {
 				out += style_resets.at(style::underline);
