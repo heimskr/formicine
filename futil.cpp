@@ -89,7 +89,7 @@ namespace formicine {
 		}
 
 		if (condense) {
-			for (i = length - 1; 0 <= i && str[i] == ' '; --i)
+			for (i = length - 1; 0 <= static_cast<long>(i) && str[i] == ' '; --i)
 				--count;
 		}
 
