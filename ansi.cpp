@@ -126,15 +126,21 @@ namespace ansi {
 		char c;
 		for (size_t i = 0; i < len; ++i) {
 			c = str[i];
-			if (c != '\x1b') {
+
+			if (c == '\x1b') {
+				// If there's only this \x1b character and the next, there's nothing left to do.
+				if (i == len - 2) break;
+				if (str[i + 1] == '[')
+					for (i += 2; str[i] < 0x40 || 0x7e < str[i]; ++i);
+			} else if (c == '^') {
+				++i;
+				if (i == len) break; // A ^ at the end does nothing.
+				if (str[i] == '[')
+					i = str.find(']', i);
+			} else {
 				out.push_back(c);
 				continue;
 			}
-
-			// If there's only this \x1b character and the next, there's nothing left to do.
-			if (i == len - 2) break;
-			if (str[i + 1] == '[')
-				for (i += 2; str[i] < 0x40 || 0x7e < str[i]; ++i);
 		}
 
 		return out;
