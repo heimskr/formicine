@@ -1,0 +1,44 @@
+#include "performance.h"
+#include "ansi.h"
+
+namespace spjalla {
+	performance perf = {};
+
+	watcher::watcher(const std::string &name_, performance *parent_): name(name_), parent(parent_) {
+		parent->start(name);
+	}
+
+	watcher::~watcher() {
+		parent->stop(name);
+	}
+
+	performance::~performance() {
+		for (const auto &pair: totals)
+			DBG(ansi::bold(pair.first) << ": "_d << runs[pair.first].size() << " -> "_d << pair.second.count()
+				<< " μs (average: " << pair.second.count() / runs[pair.first].size() << " μs)");
+		DBG("Finished list.");
+	}
+
+	void performance::start(const std::string &timer_name) {
+		timers[timer_name] = std::chrono::system_clock::now().time_since_epoch();
+	}
+
+	performance::timetype performance::stop(const std::string &timer_name) {
+		std::chrono::system_clock::duration now = std::chrono::system_clock::now().time_since_epoch();
+		const auto diff = now - timers[timer_name];
+		totals[timer_name] += diff;
+		runs[timer_name].push_back(diff);
+		return diff;
+	}
+
+	bool performance::reset(const std::string &timer_name) {
+		const bool did_exist = 0 < timers.count(timer_name);
+		timers.erase(timer_name);
+		totals.erase(timer_name);
+		return did_exist;
+	}
+
+	watcher performance::watch(const std::string &timer_name) {
+		return watcher(timer_name, this);
+	}
+}

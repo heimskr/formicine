@@ -1,6 +1,6 @@
 COMPILER		:= g++
 CC				:= $(COMPILER) -std=c++2a -g -O0 -Wall -Wextra
-OBJECTS			:= ansi.o futil.o
+OBJECTS			:= ansi.o futil.o performance.o
 TESTOUTPUT		:= ansi
 
 ifeq ($(CHECK), asan)
