@@ -13,10 +13,7 @@ namespace spjalla {
 	}
 
 	performance::~performance() {
-		for (const auto &pair: totals)
-			DBG(ansi::bold(pair.first) << ": "_d << runs[pair.first].size() << " -> "_d << pair.second.count()
-				<< " μs (average: " << pair.second.count() / runs[pair.first].size() << " μs)");
-		DBG("Finished list.");
+		results();
 	}
 
 	void performance::start(const std::string &timer_name) {
@@ -36,6 +33,14 @@ namespace spjalla {
 		timers.erase(timer_name);
 		totals.erase(timer_name);
 		return did_exist;
+	}
+
+	void performance::results() {
+		for (const auto &pair: totals) {
+			DBG(ansi::bold(pair.first) << ": "_d << runs[pair.first].size() << " -> "_d << pair.second.count()
+				<< " μs (average: " << pair.second.count() / runs[pair.first].size() << " μs)");
+		}
+		DBG("Finished list.");
 	}
 
 	watcher performance::watch(const std::string &timer_name) {

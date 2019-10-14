@@ -52,6 +52,9 @@ namespace spjalla {
 			/** Removes all data about a timer. Returns true if anything was found and removed. */
 			bool reset(const std::string &);
 
+			/** Displays all results so far. */
+			void results();
+
 			/** Returns a watcher for a given timer name. It starts a timer on creation and stops it on destruction. */
 			watcher watch(const std::string &);
 		
