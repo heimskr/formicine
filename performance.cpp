@@ -1,7 +1,7 @@
 #include "performance.h"
 #include "ansi.h"
 
-namespace spjalla {
+namespace formicine {
 	performance perf = {};
 
 	watcher::watcher(const std::string &name_, performance *parent_): name(name_), parent(parent_) {

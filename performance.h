@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace spjalla {
+namespace formicine {
 	class performance;
 
 	struct watcher {
