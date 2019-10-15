@@ -4,7 +4,7 @@
 #include <chrono>
 #include <functional>
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <vector>
 
 namespace formicine {
@@ -13,6 +13,7 @@ namespace formicine {
 	struct watcher {
 		std::string name;
 		performance *parent;
+		bool canceled = false;
 
 		watcher(const std::string &, performance *);
 		~watcher();
@@ -26,13 +27,13 @@ namespace formicine {
 
 		private:
 			/** Maps timer names to the times they were started. */
-			std::unordered_map<std::string, timetype> timers = {};
+			std::map<std::string, timetype> timers = {};
 
 			/** Maps timer names to a list of times they've taken. */
-			std::unordered_map<std::string, std::vector<timetype>> runs = {};
+			std::map<std::string, std::vector<timetype>> runs = {};
 
 			/** Maps timer names to the total amount of time they've taken. */
-			std::unordered_map<std::string, timetype> totals = {};
+			std::map<std::string, timetype> totals = {};
 
 		public:
 			performance() = default;

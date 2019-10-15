@@ -9,7 +9,8 @@ namespace formicine {
 	}
 
 	watcher::~watcher() {
-		parent->stop(name);
+		if (!canceled)
+			parent->stop(name);
 	}
 
 	performance::~performance() {
@@ -37,8 +38,7 @@ namespace formicine {
 
 	void performance::results() {
 		for (const auto &pair: totals) {
-			DBG(ansi::bold(pair.first) << ": "_d << runs[pair.first].size() << " -> "_d << pair.second.count()
-				<< " μs (average: " << pair.second.count() / runs[pair.first].size() << " μs)");
+			DBG(ansi::bold(pair.first) << ": "_d << ansi::cyan(std::to_string(runs[pair.first].size())) << " -> "_d << ansi::orange(std::to_string(pair.second.count())) << " μs (average: " << ansi::magenta(std::to_string(pair.second.count() / runs[pair.first].size())) << " μs)");
 		}
 		DBG("Finished list.");
 	}
