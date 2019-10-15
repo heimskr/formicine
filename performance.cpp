@@ -5,12 +5,16 @@ namespace formicine {
 	performance perf = {};
 
 	watcher::watcher(const std::string &name_, performance *parent_): name(name_), parent(parent_) {
-		parent->start(name);
+		restart();
 	}
 
 	watcher::~watcher() {
 		if (!canceled)
 			parent->stop(name);
+	}
+
+	void watcher::restart() {
+		parent->start(name);
 	}
 
 	performance::~performance() {

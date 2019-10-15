@@ -17,6 +17,8 @@ namespace formicine {
 
 		watcher(const std::string &, performance *);
 		~watcher();
+
+		void restart();
 	};
 
 	/**
