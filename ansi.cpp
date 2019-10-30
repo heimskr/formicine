@@ -451,6 +451,74 @@ namespace ansi {
 		style_out << style_resets.at(style);
 		return *this;
 	}
+
+	const std::string reset_all = "\e[0m";
+	const std::string reset_fg  = "\e[39m";
+	const std::string reset_bg  = "\e[49m";
+
+	const std::string str_check   = "\u2714";
+	const std::string str_nope    = "\u2718";
+	const std::string str_warning = "\u26a0\ufe0f";
+
+	const std::map<color, std::string> color_names = {
+		{color::normal,    "normal"},
+		{color::red,       "red"},
+		{color::orange,    "orange"},
+		{color::yellow,    "yellow"},
+		{color::yeen,      "yeen"},
+		{color::green,     "green"},
+		{color::blue,      "blue"},
+		{color::cyan,      "cyan"},
+		{color::magenta,   "magenta"},
+		{color::purple,    "purple"},
+		{color::black,     "black"},
+		{color::gray,      "gray"},
+		{color::lightgray, "light gray"},
+		{color::white,     "white"},
+		{color::pink,      "pink"},
+		{color::sky,       "sky"},
+		{color::verydark,  "verydark"},
+		{color::blood,     "blood"},
+		{color::brown,     "brown"},
+	};
+
+	const std::map<color, std::string> color_bases = {
+		{color::normal,    "9"},
+		{color::red,       "1"},
+		{color::orange,    "8;5;202"},
+		{color::yellow,    "3"},
+		{color::yeen,      "8;5;112"},
+		{color::green,     "2"},
+		{color::blue,      "4"},
+		{color::cyan,      "6"},
+		{color::magenta,   "5"},
+		{color::purple,    "8;5;56"},
+		{color::black,     "0"},
+		{color::gray,      "8;5;8"},
+		{color::lightgray, "8;5;7"},
+		{color::white,     "7"},
+		{color::pink,      "8;5;219"},
+		{color::sky,       "8;5;153"},
+		{color::verydark,  "8;5;232"},
+		{color::blood,     "8;5;52"},
+		{color::brown,     "8;5;130"},
+	};
+
+	const std::map<style, std::string> style_codes = {
+		{style::bold,      "\e[1m"},
+		{style::dim,       "\e[2m"},
+		{style::italic,    "\e[3m"},
+		{style::underline, "\e[4m"},
+		{style::inverse,   "\e[7m"},
+	};
+
+	const std::map<style, std::string> style_resets = {
+		{style::bold,      "\e[22m"},
+		{style::dim,       "\e[22m"},
+		{style::italic,    "\e[23m"},
+		{style::underline, "\e[24m"},
+		{style::inverse,   "\e[27m"},
+	};
 }
 
 std::string operator"" _b(const char *str, unsigned long) { return ansi::wrap(str, ansi::style::bold); }
