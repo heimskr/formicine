@@ -29,31 +29,35 @@ namespace formicine {
 #endif
 	}
 
-	void performance::start(const std::string &timer_name) {
 #ifndef DISABLE_PERFORMANCE
+	void performance::start(const std::string &timer_name) {
 		timers[timer_name] = std::chrono::system_clock::now().time_since_epoch();
+#else
+	void performance::start(const std::string &) {
 #endif
 	}
 
-	performance::timetype performance::stop(const std::string &timer_name) {
 #ifndef DISABLE_PERFORMANCE
+	performance::timetype performance::stop(const std::string &timer_name) {
 		std::chrono::system_clock::duration now = std::chrono::system_clock::now().time_since_epoch();
 		const auto diff = now - timers[timer_name];
 		totals[timer_name] += diff;
 		runs[timer_name].push_back(diff);
 		return diff;
 #else
+	performance::timetype performance::stop(const std::string &) {
 		return {};
 #endif
 	}
 
-	bool performance::reset(const std::string &timer_name) {
 #ifndef DISABLE_PERFORMANCE
+	bool performance::reset(const std::string &timer_name) {
 		const bool did_exist = 0 < timers.count(timer_name);
 		timers.erase(timer_name);
 		totals.erase(timer_name);
 		return did_exist;
 #else
+	bool performance::reset(const std::string &) {
 		return true;
 #endif
 	}
