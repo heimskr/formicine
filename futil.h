@@ -138,6 +138,21 @@ namespace formicine::util {
 
 		return *begin;
 	}
+
+	template <typename Iter>
+	void insensitive_sort(Iter begin, Iter end) {
+		std::sort(begin, end, [&](const std::string &left, const std::string &right) {
+			const auto mismatch = std::mismatch(left.cbegin(), left.cend(), right.cbegin(), right.cend(),
+				[](const unsigned char lchar, const unsigned char rchar) {
+					return tolower(lchar) == tolower(rchar);
+				});
+
+			if (mismatch.second != right.cend())
+				return false;
+
+			return mismatch.first == left.cend() || tolower(*mismatch.first) < tolower(*mismatch.second);
+		});
+	}
 }
 
 #endif
