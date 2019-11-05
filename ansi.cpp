@@ -16,7 +16,7 @@ namespace ansi {
 		for (size_t i = 0; i < length; ++i) {
 			const char ch = str[i];
 			const size_t remaining = length - i - 1;
-			if (ch != '^' || remaining == 1) {
+			if (ch != '^' || remaining == 0) {
 				out.push_back(ch);
 				continue;
 			}
