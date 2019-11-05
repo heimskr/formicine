@@ -4,8 +4,6 @@
 
 #include "ansi.h"
 
-using std::string;
-
 namespace ansi {
 	std::ofstream dbgout(".log", std::ofstream::app);
 	ansistream dbgstream(dbgout, dbgout);
@@ -48,8 +46,13 @@ namespace ansi {
 				out += reset_all;
 			} else if (next == '[' && 3 <= remaining) {
 				const size_t close_pos = str.find(']', i + 2);
-				const std::string type = str.substr(i + 1, close_pos - (i + 1));
-				DBG("type{" << type << "}");
+				std::string type = str.substr(i + 1, close_pos - (i + 1));
+				bool bright = false;
+				if (type.back() == '!') {
+					bright = true;
+					type.pop_back();
+				}
+
 				color col = get_color(type);
 
 				if (type == "/f") {
@@ -60,11 +63,11 @@ namespace ansi {
 					col = get_color(type.substr(1));
 					if (col == color::normal && type != "normal")
 						throw std::invalid_argument("Invalid format identifier");
-					out += get_bg(col);
+					out += get_bg(col, bright);
 				} else if (col == color::normal && type != "normal") {
 					throw std::invalid_argument("Invalid format identifier");
 				} else {
-					out += get_fg(col);
+					out += get_fg(col, bright);
 				}
 
 				i = close_pos;
@@ -79,22 +82,33 @@ namespace ansi {
 	color_pair fg(ansi::color color) { return {color, color_type::foreground}; }
 	color_pair bg(ansi::color color) { return {color, color_type::background}; }
 
-	string get_fg(ansi::color color) { return "\e[3" + color_bases.at(color) + "m"; }
-	string get_bg(ansi::color color) { return "\e[4" + color_bases.at(color) + "m"; }
+	std::string get_fg(ansi::color color, bool bright) {
+		const std::string &base = color_bases.at(color);
+		if (bright && base.size() == 1)
+			return "\e[9" + base + "m";
+		return "\e[3" + base + "m";
+	}
+
+	std::string get_bg(ansi::color color, bool bright) {
+		const std::string &base = color_bases.at(color);
+		if (bright && base.size() == 1)
+			return "\e[10" + base + "m";
+		return "\e[4" + base + "m";
+	}
 
 	ansi_pair<style> remove(ansi::style style) {
 		return {style, false};
 	}
 
-	string wrap(const string &str, const ansi::color_pair &pair) {
+	std::string wrap(const std::string &str, const ansi::color_pair &pair) {
 		return pair.left() + str + pair.right();
 	}
 
-	string wrap(const string &str, const ansi::color &color) {
+	std::string wrap(const std::string &str, const ansi::color &color) {
 		return wrap(str, color_pair(color));
 	}
 
-	string wrap(const string &str, const ansi::style &style) {
+	std::string wrap(const std::string &str, const ansi::style &style) {
 		return style_codes.at(style) + str + style_resets.at(style);
 	}
 
@@ -220,11 +234,11 @@ namespace ansi {
 	MKCOLOR(verydark)
 #undef MKCOLOR
 
-	string color_pair::left() const {
+	std::string color_pair::left() const {
 		return type == color_type::background? get_bg(color) : get_fg(color);
 	}
 
-	string color_pair::right() const {
+	std::string color_pair::right() const {
 		return type == color_type::background? reset_bg : reset_fg;
 	}
 

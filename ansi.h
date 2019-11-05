@@ -180,8 +180,8 @@ namespace ansi {
 	static action cparen = action::close_paren;
 	static action parens = action::enable_parens;
 
-	std::string get_fg(ansi::color);
-	std::string get_bg(ansi::color);
+	std::string get_fg(ansi::color, bool bright = false);
+	std::string get_bg(ansi::color, bool bright = false);
 	color_pair fg(ansi::color color);
 	color_pair bg(ansi::color color);
 	ansi_pair<ansi::style> remove(ansi::style);
