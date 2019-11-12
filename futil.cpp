@@ -282,4 +282,12 @@ namespace formicine::util {
 
 		return false;
 	}
+
+	std::string replace_all(std::string str, const std::string &to_replace, const std::string &replace_with) {
+		const size_t replaced_length = to_replace.length();
+		size_t pos;
+		while ((pos = str.find(to_replace)) != std::string::npos)
+			str.replace(pos, replaced_length, replace_with);
+		return str;
+	}
 }
