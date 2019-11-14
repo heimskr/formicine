@@ -192,6 +192,7 @@ namespace ansi {
 	void write(const std::string &);
 	std::string get_name(ansi::color);
 	ansi::color get_color(const std::string &);
+	bool has_color(const std::string &);
 
 	/** Strips the ANSI escape sequences from a string. */
 	std::string strip(const std::string &);

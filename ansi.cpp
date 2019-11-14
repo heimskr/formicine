@@ -134,6 +134,15 @@ namespace ansi {
 		return ansi::color::normal;
 	}
 
+	bool has_color(const std::string &name) {
+		for (const auto &pair: color_names) {
+			if (pair.second == name)
+				return true;
+		}
+
+		return false;
+	}
+
 	std::string strip(const std::string &str) {
 		std::string out = "";
 		size_t len = str.length();
