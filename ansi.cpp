@@ -260,7 +260,7 @@ namespace ansi {
 	ansistream & ansistream::left_paren() {
 		if (parens_on) {
 			*this << style::dim;
-			content_out << "(";
+			FORMICINE_PRINT_CONTENT("(");
 			*this >> style::dim;
 		}
 
@@ -271,7 +271,7 @@ namespace ansi {
 		if (parens_on) {
 			parens_on = false;
 			*this << style::dim;
-			content_out << ")";
+			FORMICINE_PRINT_CONTENT(")");
 			*this >> style::dim;
 		}
 
@@ -292,25 +292,39 @@ namespace ansi {
 
 
 	ansistream & ansistream::flush() {
+#ifndef FORMICINE_NOFLUSH
 		content_out.flush();
 		style_out.flush();
+#endif
 		return *this;
 	}
 
 	ansistream & ansistream::clear() {
-		style_out << "\e[2J";
+		FORMICINE_PRINT_STYLE("\e[2J");
 		return *this;
 	}
 
 	ansistream & ansistream::jump(int x, int y) {
 		if (0 <= x && 0 <= y) {
+#ifdef FORMICINE_PRINTF
+			printf("\e[%d;%dH", y + 1, x + 1);
+#else
 			style_out << "\e[" << (y + 1) << ";" << (x + 1) << "H";
+#endif
 		} else if (0 <= x) {
+#ifdef FORMICINE_PRINTF
+			printf("\e[%dG", x + 1);
+#else
 			style_out << "\e[" << (x + 1) << "G";
+#endif
 		} else if (0 <= y) {
+#ifdef FORMICINE_PRINTF
+			printf("\e[999999A");
+			if (0 < y) printf("\e[%dB", y);
+#else
 			style_out << "\e[999999A";
-			if (0 < y)
-				style_out << "\e[" + std::to_string(y) + "B";
+			if (0 < y) style_out << "\e[" << y << "B";
+#endif
 		} else {
 			throw std::runtime_error("Invalid jump: (" + std::to_string(x) + ", " + std::to_string(y) + ")");
 		}
@@ -319,18 +333,21 @@ namespace ansi {
 	}
 
 	ansistream & ansistream::jump()        { jump(0, 0);             return *this; }
-	ansistream & ansistream::save()        { style_out << "\e[s";    return *this; }
-	ansistream & ansistream::restore()     { style_out << "\e[u";    return *this; }
-	ansistream & ansistream::clear_line()  { style_out << "\e[2K";   return *this; }
-	ansistream & ansistream::clear_left()  { style_out << "\e[1K";   return *this; }
-	ansistream & ansistream::clear_right() { style_out << "\e[K";    return *this; }
+	ansistream & ansistream::save()        { FORMICINE_PRINT_STYLE("\e[s");    return *this; }
+	ansistream & ansistream::restore()     { FORMICINE_PRINT_STYLE("\e[u");    return *this; }
+	ansistream & ansistream::clear_line()  { FORMICINE_PRINT_STYLE("\e[2K");   return *this; }
+	ansistream & ansistream::clear_left()  { FORMICINE_PRINT_STYLE("\e[1K");   return *this; }
+	ansistream & ansistream::clear_right() { FORMICINE_PRINT_STYLE("\e[K");    return *this; }
 
-	ansistream & ansistream::show() { style_out << "\e[?25h"; hidden = false; return *this; }
-	ansistream & ansistream::hide() { style_out << "\e[?25l"; hidden = true;  return *this; }
+	ansistream & ansistream::show() { FORMICINE_PRINT_STYLE("\e[?25h"); hidden = false; return *this; }
+	ansistream & ansistream::hide() { FORMICINE_PRINT_STYLE("\e[?25l"); hidden = true;  return *this; }
 
 	ansistream & ansistream::move(int n, char c) {
-		if (n != 0)
-			style_out << "\e[" << std::to_string(n) << c;
+#ifdef FORMICINE_PRINTF
+		if (n != 0) printf("\e[%d%c", n, c);
+#else
+		if (n != 0) style_out << "\e[" << std::to_string(n) << c;
+#endif
 		return *this;
 	}
 
@@ -346,28 +363,67 @@ namespace ansi {
 		return *this;
 	}
 
-	ansistream & ansistream::hpos(int x)             { style_out << "\e[" + std::to_string(x + 1) + "H"; return *this; }
-	ansistream & ansistream::scroll_up(int lines)    { style_out << "\e[" + std::to_string(lines) + "S"; return *this; }
-	ansistream & ansistream::scroll_down(int lines)  { style_out << "\e[" + std::to_string(lines) + "T"; return *this; }
-	ansistream & ansistream::delete_chars(int count) { style_out << "\e[" + std::to_string(count) + "P"; return *this; }
-
-	ansistream & ansistream::set_origin()   { style_out << "\e[?6h"; origin_on = true;  return *this; }
-	ansistream & ansistream::reset_origin() { style_out << "\e[?6l"; origin_on = false; return *this; }
-
-	ansistream & ansistream::hmargins(int left, int right) {
-		style_out << "\e[" + std::to_string(left + 1) + ";" + std::to_string(right + 1) + "s";
+	ansistream & ansistream::hpos(int x) {
+#ifdef FORMICINE_PRINTF
+		printf("\e[%dH", x + 1);
+#else
+		style_out << "\e[" + std::to_string(x + 1) + "H";
+#endif
 		return *this;
 	}
 
-	ansistream & ansistream::hmargins()         { style_out << "\e[s";    return *this; }
-	ansistream & ansistream::enable_hmargins()  { style_out << "\e[?69h"; return *this; }
-	ansistream & ansistream::disable_hmargins() { style_out << "\e[?69l"; return *this; }
-	ansistream & ansistream::vmargins()         { style_out << "\e[r";    return *this; }
+	ansistream & ansistream::scroll_up(int lines) {
+#ifdef FORMICINE_PRINTF
+		printf("\e[%dS", lines);
+#else
+		style_out << "\e[" + std::to_string(lines) + "S";
+#endif
+		return *this;
+	}
+
+	ansistream & ansistream::scroll_down(int lines) {
+#ifdef FORMICINE_PRINTF
+		printf("\e[%dT", lines);
+#else
+		style_out << "\e[" + std::to_string(lines) + "T";
+#endif
+		return *this;
+	}
+
+	ansistream & ansistream::delete_chars(int count) {
+#ifdef FORMICINE_PRINTF
+		printf("\e[%dP", count);
+#else
+		style_out << "\e[" + std::to_string(count) + "P";
+#endif
+		return *this;
+	}
+
+	ansistream & ansistream::set_origin()   { FORMICINE_PRINT_STYLE("\e[?6h"); origin_on = true;  return *this; }
+	ansistream & ansistream::reset_origin() { FORMICINE_PRINT_STYLE("\e[?6l"); origin_on = false; return *this; }
+
+	ansistream & ansistream::hmargins(int left, int right) {
+#ifdef FORMICINE_PRINTF
+		printf("\e[%d;%ds", left + 1, right + 1);
+#else
+		style_out << "\e[" + std::to_string(left + 1) + ";" + std::to_string(right + 1) + "s";
+#endif
+		return *this;
+	}
+
+	ansistream & ansistream::hmargins()         { FORMICINE_PRINT_STYLE("\e[s");    return *this; }
+	ansistream & ansistream::enable_hmargins()  { FORMICINE_PRINT_STYLE("\e[?69h"); return *this; }
+	ansistream & ansistream::disable_hmargins() { FORMICINE_PRINT_STYLE("\e[?69l"); return *this; }
+	ansistream & ansistream::vmargins()         { FORMICINE_PRINT_STYLE("\e[r");    return *this; }
 
 	ansistream & ansistream::vmargins(int top, int bottom) {
 		const std::string top_str = top == -1? "" : std::to_string(top + 1);
 		const std::string bottom_str = bottom == -1? "" : std::to_string(bottom + 1);
+#ifdef FORMICINE_PRINTF
+		printf("\e[%s;%sr", top_str.c_str(), bottom_str.c_str());
+#else
 		style_out << "\e[" + top_str + ";" + bottom_str + "r";
+#endif
 		return *this;
 	}
 
@@ -383,7 +439,7 @@ namespace ansi {
 		return *this;
 	}
 
-	ansistream & ansistream::reset_colors() { style_out << "\e[39;49m"; return *this; }
+	ansistream & ansistream::reset_colors() { FORMICINE_PRINT_STYLE("\e[39;49m"); return *this; }
 
 
 // Public operators
@@ -392,7 +448,7 @@ namespace ansi {
 	ansistream & ansistream::operator<<(const ansi::color &c) {
 		// Adds a text color: "as << red"
 		fg_color = c;
-		style_out << get_fg(c);
+		FORMICINE_PRINT_STYLE(get_fg(c).c_str());
 		return *this;
 	}
 
@@ -402,9 +458,9 @@ namespace ansi {
 		// - "as << bg(red)"
 
 		if (p.type == color_type::background)
-			style_out << get_bg(bg_color = p.color);
+			FORMICINE_PRINT_STYLE(get_bg(bg_color = p.color).c_str());
 		else
-			style_out << get_fg(fg_color = p.color);
+			FORMICINE_PRINT_STYLE(get_fg(fg_color = p.color).c_str());
 
 		return *this;
 	}
@@ -412,7 +468,7 @@ namespace ansi {
 	ansistream & ansistream::operator<<(const ansi::style &style) {
 		// Adds a style: "as << bold"
 		styles.insert(style);
-		style_out << style_codes.at(style);
+		FORMICINE_PRINT_STYLE(style_codes.at(style).c_str());
 		return *this;
 	}
 
@@ -439,8 +495,10 @@ namespace ansi {
 				throw std::invalid_argument("Invalid action: " + std::to_string(static_cast<int>(action)));
 		}
 
+#ifndef FORMICINE_NOFLUSH
 		this->content_out.flush();
 		this->style_out.flush();
+#endif
 		return *this;
 	}
 
@@ -463,7 +521,7 @@ namespace ansi {
 
 	ansistream & ansistream::operator<<(const char *t) {
 		left_paren();
-		content_out << t;
+		FORMICINE_PRINT_CONTENT(t);
 		right_paren();
 		return *this;
 	}
@@ -471,7 +529,7 @@ namespace ansi {
 	ansistream & ansistream::operator>>(const ansi::style &style) {
 		// Removes a style: "as >> bold"
 		styles.erase(style);
-		style_out << style_resets.at(style);
+		FORMICINE_PRINT_STYLE(style_resets.at(style).c_str());
 		return *this;
 	}
 
