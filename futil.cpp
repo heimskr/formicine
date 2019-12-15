@@ -290,4 +290,18 @@ namespace formicine::util {
 			str.replace(pos, replaced_length, replace_with);
 		return str;
 	}
+
+	std::string remove_html(std::string str) {
+		for (size_t open = str.find('<'); open != std::string::npos; open = str.find('<')) {
+			const size_t close = str.find('>', open);
+			if (close == std::string::npos) {
+				// No closing angle bracket? Give up.
+				return str;
+			}
+
+			str.erase(open, close - open + 1);
+		}
+
+		return str;
+	}
 }

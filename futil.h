@@ -114,6 +114,9 @@ namespace formicine::util {
 	/** Replaces all occurrences of a substring in a string with another string. */
 	std::string replace_all(std::string str, const std::string &to_replace, const std::string &replace_with);
 
+	/** Makes a naïve attempt to strip HTML tags from a string. */
+	std::string remove_html(std::string);
+
 	/** Returns a vector of all elements in a range that begin with a given string. */
 	template <typename T, typename Iter>
 	std::vector<T> starts_with(Iter start, Iter end, const std::string &prefix) {
