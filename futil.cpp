@@ -109,7 +109,7 @@ namespace formicine::util {
 		if (str.empty())
 			return str;
 
-		const size_t first = str.find_first_not_of(" \t");
+		const size_t first = str.find_first_not_of(" \t\r\n");
 		if (first == std::string::npos)
 			str.clear();
 		else
@@ -128,7 +128,7 @@ namespace formicine::util {
 			return str;
 
 		char back = str.back();
-		while (back == ' ' || back == '\t') {
+		while (back == ' ' || back == '\t' || back == '\r' || back == '\n') {
 			str.pop_back();
 			back = str.back();
 		}
