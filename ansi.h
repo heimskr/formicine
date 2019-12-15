@@ -156,8 +156,27 @@ namespace ansi {
 			ansistream & operator<<(std::ostream & (*fn)(std::ostream &));
 			ansistream & operator<<(std::ostream & (*fn)(std::ios &));
 			ansistream & operator<<(std::ostream & (*fn)(std::ios_base &));
-			ansistream & operator<<(const char *t);
+			ansistream & operator<<(const char *);
 
+#ifdef FORMICINE_PRINTF
+#warning "Formicine will use printf() instead of streams."
+#define FORMICINE_PRINT_CONTENT(s) do { printf("%s", (s));  } while (0)
+#define FORMICINE_PRINT_STYLE(s)   do { printf("%s", (s));  } while (0)
+			template <typename P>
+			ansistream & operator<<(P *ptr)               { printf("%p", ptr); return *this; }
+			ansistream & operator<<(char c)               { printf("%c", c);   return *this; }
+			ansistream & operator<<(int n)                { printf("%d", n);   return *this; }
+			ansistream & operator<<(unsigned int n)       { printf("%u", n);   return *this; }
+			ansistream & operator<<(long long n)          { printf("%lld", n); return *this; }
+			ansistream & operator<<(unsigned long long n) { printf("%llu", n); return *this; }
+			ansistream & operator<<(float n)              { printf("%f", n);   return *this; }
+			ansistream & operator<<(double n)             { printf("%f", n);   return *this; }
+			ansistream & operator<<(const std::_Setw &)   { return *this; }
+			template <typename T> ansistream & operator<<(const std::_Setfill<T> &) { return *this; }
+			ansistream & operator<<(const std::string &s) { printf("%s", s.c_str()); return *this; }
+#else
+#define FORMICINE_PRINT_CONTENT(s) do { content_out << (s); } while (0)
+#define FORMICINE_PRINT_STYLE(s)   do { style_out   << (s); } while (0)
 			template <typename T>
 			ansistream & operator<<(const T &value) {
 				// Piping miscellaneous values into the ansistream simply forwards them as-is to the content stream.
@@ -166,6 +185,7 @@ namespace ansi {
 				right_paren();
 				return *this;
 			}
+#endif
 
 			ansistream & operator>>(const ansi::style &);
 	};
