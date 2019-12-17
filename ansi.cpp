@@ -224,6 +224,14 @@ namespace ansi {
 		return wrap(str, style::dim);
 	}
 
+	std::string underline(const std::string &str) {
+		return wrap(str, style::underline);
+	}
+
+	std::string italic(const std::string &str) {
+		return wrap(str, style::italic);
+	}
+
 #define MKCOLOR(x) std::string x(const std::string &str) { return wrap(str, color::x); }
 	MKCOLOR(red)
 	MKCOLOR(orange)

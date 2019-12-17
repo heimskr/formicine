@@ -229,6 +229,12 @@ namespace ansi {
 	/** Dims a string by wrapping it with the enable-dim and disable-dim escapes. */
 	std::string dim(const std::string &);
 
+	/** Underlines a string by wrapping it with the enable-underline and disable-underline escapes. */
+	std::string underline(const std::string &);
+
+	/** Italicizes a string by wrapping it with the enable-italics and disable-italics escapes. */
+	std::string italic(const std::string &);
+
 	/** Erases part of a string (ANSI aware). */
 	std::string & erase(std::string &, size_t pos = 0, size_t len = std::string::npos);
 
