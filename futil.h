@@ -7,7 +7,7 @@
 
 namespace formicine::util {
 	/** Splits a string by a given delimiter. If condense is true, empty strings won't be included in the output. */
-	std::vector<std::string> split(const std::string &str, const std::string &delimeter, bool condense = true);
+	std::vector<std::string> split(const std::string &str, const std::string &delimiter, bool condense = true);
 
 	template <typename Iter>
 	std::string join(Iter begin, Iter end, const std::string &delim = " ") {
