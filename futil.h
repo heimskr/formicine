@@ -1,6 +1,7 @@
 #ifndef FORMICINE_FUTIL_H_
 #define FORMICINE_FUTIL_H_
 
+#include <algorithm>
 #include <sstream>
 #include <string>
 #include <vector>
