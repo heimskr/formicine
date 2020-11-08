@@ -594,19 +594,21 @@ namespace ansi {
 	};
 
 	const std::map<style, std::string> style_codes = {
-		{style::bold,      "\e[1m"},
-		{style::dim,       "\e[2m"},
-		{style::italic,    "\e[3m"},
-		{style::underline, "\e[4m"},
-		{style::inverse,   "\e[7m"},
+		{style::bold,          "\e[1m"},
+		{style::dim,           "\e[2m"},
+		{style::italic,        "\e[3m"},
+		{style::underline,     "\e[4m"},
+		{style::inverse,       "\e[7m"},
+		{style::strikethrough, "\e[9m"},
 	};
 
 	const std::map<style, std::string> style_resets = {
-		{style::bold,      "\e[22m"},
-		{style::dim,       "\e[22m"},
-		{style::italic,    "\e[23m"},
-		{style::underline, "\e[24m"},
-		{style::inverse,   "\e[27m"},
+		{style::bold,          "\e[22m"},
+		{style::dim,           "\e[22m"},
+		{style::italic,        "\e[23m"},
+		{style::underline,     "\e[24m"},
+		{style::inverse,       "\e[27m"},
+		{style::strikethrough, "\e[29m"},
 	};
 }
 

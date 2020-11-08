@@ -26,7 +26,7 @@ namespace ansi {
 		verydark, blood, brown
 	};
 
-	enum class style {bold, dim, italic, underline, inverse};
+	enum class style {bold, dim, italic, underline, inverse, strikethrough};
 	enum class color_type: int {background = 1, foreground = 2, both = 3};
 	enum class action: int {reset, end_line, check, nope, warning, information, open_paren, close_paren, enable_parens};
 
