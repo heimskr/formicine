@@ -16,6 +16,7 @@ namespace formicine {
 		bool canceled = false;
 
 		watcher(const std::string &, performance *);
+		watcher(const watcher &) = default;
 		~watcher();
 
 		void restart();
