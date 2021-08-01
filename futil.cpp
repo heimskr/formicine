@@ -112,8 +112,7 @@ namespace formicine::util {
 	}
 
 	std::string rtrim(const std::string &str) {
-		std::string copy {str};
-		return rtrim(copy);
+		return rtrim(std::string(str));
 	}
 
 	std::pair<ssize_t, ssize_t> word_indices(const std::string &str, size_t cursor) {
